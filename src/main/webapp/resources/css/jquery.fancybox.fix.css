@@ -1,0 +1,16 @@
+/*Fixing resource references.*/
+#fancybox-loading, .fancybox-close, .fancybox-prev span, .fancybox-next span {
+    background-image: url('/resources/img/fancybox_sprite.png');
+}
+
+#fancybox-loading div {
+    background: url('/resources/img/fancybox_loading.gif') center center no-repeat;
+}
+
+.fancybox-nav {
+    background: transparent url('/resources/img/blank.gif'); /* helps IE */
+}
+
+.fancybox-overlay {
+    background: url('/resources/img/fancybox_overlay.png');
+}
