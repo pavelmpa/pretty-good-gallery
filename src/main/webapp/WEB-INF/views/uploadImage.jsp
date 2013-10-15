@@ -2,7 +2,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -44,7 +44,7 @@
                             <span class="btn btn-file">
                                 <span class="fileupload-new">Select picture</span>
                                 <span class="fileupload-exists">Change</span>
-                                <input id="file-upload-input" name="file" type="file" accept="image/*"/>
+                                <input id="file-upload-input" name="file" type="file" accept="image/*" required="required"/>
                             </span>
                     <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
                     <input type="submit" value="Upload" class="btn btn-success form-upload" style="height: 30px;"/>
