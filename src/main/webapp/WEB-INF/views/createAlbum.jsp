@@ -23,7 +23,7 @@
         <jsp:include page="templates/pageHead.jsp"/>
         <spring:url var="actionUrl" value="/albums"/>
         <div>
-            <form:form id="create_album" cssClass="form-signin" action="actuionUrl" commandName="album" method="post">
+            <form:form id="create_album" cssClass="form-signin" action="${actionUrl}" commandName="album" method="post">
                 <form:errors path="*" cssClass="alert alert-error" element="div"/>
                 <fieldset>
                     <legend>Create new album</legend>
@@ -31,7 +31,7 @@
                     <form:input path="title" id="title" cssClass="input-xxlarge" type="text" value="${album.title}"/>
                     <label for="description">Description</label>
                     <form:textarea path="description" id="description"
-                                   cssClass="input-xxlarge area-limits" cssStyle="" rows="3"
+                                   cssClass="input-xxlarge area-limits" cssStyle="" rows="4"
                                    value="${album.description}"/>
                     <br/>
                     <input type="submit" class="btn btn-success" value="Create"/>

@@ -1,19 +1,14 @@
 package com.herokuapp.webgalleryshowcase.domain;
 
-import com.herokuapp.webgalleryshowcase.date.JsonDateSerializer;
+import com.herokuapp.webgalleryshowcase.json.JsonDateSerializer;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.Date;
 
 public class Album {
 
     private int id;
-    @NotBlank(message = "You should fill title.")
-    @Length(min = 10, max = 100)
     private String title;
-    @Length(max = 400)
     private String description;
     private String userOwner;
     private boolean publicAccess;

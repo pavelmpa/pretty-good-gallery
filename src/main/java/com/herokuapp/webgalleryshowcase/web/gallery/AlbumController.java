@@ -2,12 +2,14 @@ package com.herokuapp.webgalleryshowcase.web.gallery;
 
 import com.herokuapp.webgalleryshowcase.dao.AlbumDao;
 import com.herokuapp.webgalleryshowcase.domain.Album;
+import com.herokuapp.webgalleryshowcase.service.validators.AlbumValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +23,11 @@ public class AlbumController {
 
     @Autowired
     private AlbumDao albumDao;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(new AlbumValidator());
+    }
 
     @RequestMapping(value = "/albums/create", method = RequestMethod.GET)
     public String viewCreateAlbumPage(Model model) {
@@ -74,14 +81,14 @@ public class AlbumController {
         //TODO: Implement delete album;
     }
 
-    @RequestMapping(value = "/albums/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/albums", method = RequestMethod.POST)
     public String createAlbum(@ModelAttribute("album") @Valid Album album,
                               BindingResult bindingResult,
                               Principal principal) {
-        album.setUserOwner(principal.getName());
         if (bindingResult.hasErrors()) {
             return "createAlbum";
         }
+        album.setUserOwner(principal.getName());
         albumDao.createAlbum(album);
         return "redirect:/albums";
     }

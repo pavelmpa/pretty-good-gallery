@@ -1,4 +1,4 @@
-package com.herokuapp.webgalleryshowcase.date;
+package com.herokuapp.webgalleryshowcase.json;
 
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
