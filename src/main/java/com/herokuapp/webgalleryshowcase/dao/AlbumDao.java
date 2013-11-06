@@ -12,7 +12,7 @@ public interface AlbumDao {
 
     Album retrieveAlbum(int albumId);
 
-    void deleteAlbum(int albumId);
+    boolean deleteAlbum(int albumId);
 
     void updateAlbum(Album album);
 }

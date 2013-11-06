@@ -6,6 +6,8 @@ import com.herokuapp.webgalleryshowcase.service.validators.AlbumValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -77,8 +79,14 @@ public class AlbumController {
     }
 
     @RequestMapping(value = "/albums/{id}", method = RequestMethod.DELETE)
-    public void deleteAlbum(@PathVariable int id) {
-        //TODO: Implement delete album;
+    public ResponseEntity<String> deleteAlbum(@PathVariable int id) {
+        ResponseEntity<String> response;
+        if (albumDao.deleteAlbum(id)) {
+            response = new ResponseEntity<>("Album has been deleted successfully.", HttpStatus.OK);
+        } else {
+            response = new ResponseEntity<>("Album does not exist.", HttpStatus.NO_CONTENT);
+        }
+        return response;
     }
 
     @RequestMapping(value = "/albums", method = RequestMethod.POST)

@@ -2,8 +2,6 @@ package com.herokuapp.webgalleryshowcase.dao.database;
 
 import com.herokuapp.webgalleryshowcase.dao.AlbumDao;
 import com.herokuapp.webgalleryshowcase.domain.Album;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -21,8 +19,6 @@ import java.util.Map;
 
 @Repository
 public class AlbumDaoJdbcTemplate implements AlbumDao {
-
-    private final Logger log = LoggerFactory.getLogger(AlbumDaoJdbcTemplate.class);
 
     private final static String ADD_ALBUM = "INSERT INTO albums (title, description, owner_user_id) " +
             "VALUES (:title, :description, (SELECT id FROM users WHERE email = :userOwner))";
@@ -59,10 +55,9 @@ public class AlbumDaoJdbcTemplate implements AlbumDao {
     }
 
     @Override
-    public void deleteAlbum(int albumId) {   //ToDo: What return?
-        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(albumId);
-        int rowsDeleted = jdbcTemplate.update(DELETE_ALBUM, parameterSource);
-        log.info("Album was deleted. Rows: " + rowsDeleted);
+    public boolean deleteAlbum(int albumId) {
+        SqlParameterSource parameterSource = new MapSqlParameterSource("albumId", albumId);
+        return jdbcTemplate.update(DELETE_ALBUM, parameterSource) > 0;
     }
 
     @Override
