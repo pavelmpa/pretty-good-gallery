@@ -28,11 +28,13 @@ public class AlbumDaoJdbcTemplate implements AlbumDao {
     private final static String DELETE_ALBUM = "DELETE FROM albums WHERE album_id = :albumId";
 
     private final static String RETRIEVE_ALBUM =
-            "SELECT album_id, title, description, public_access, created_time, last_modified, email AS user_owner " +
+            "SELECT album_id, title, description, public_access, created_time, last_modified, email AS user_owner, " +
+                    "(SELECT COUNT(*) FROM image_items WHERE image_items.album_holder_id=albums.album_id) AS images_number " +
                     "FROM albums INNER JOIN users ON owner_user_id = users.id WHERE album_id = :albumId";
 
     private final static String RETRIEVE_ALL_USER_ALBUMS_BY_EMIL =
-            "SELECT album_id, title, description, public_access, created_time, last_modified, email AS user_owner " +
+            "SELECT album_id, title, description, public_access, created_time, last_modified, email AS user_owner, " +
+                    "(SELECT COUNT(*) FROM image_items WHERE image_items.album_holder_id=albums.album_id) AS images_number " +
                     "FROM albums INNER JOIN users ON owner_user_id = users.id where email = :email";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -85,6 +87,7 @@ public class AlbumDaoJdbcTemplate implements AlbumDao {
             album.setPublicAccess(resultSet.getBoolean("public_access"));
             album.setCreated(resultSet.getDate("created_time"));
             album.setLastModified(resultSet.getDate("last_modified"));
+            album.setNumberOfImages(resultSet.getInt("images_number"));
 
             return album;
         }
