@@ -12,7 +12,7 @@ CREATE TABLE users (
   last_name      VARCHAR(40),
   email          VARCHAR            NOT NULL UNIQUE,
   username       VARCHAR(20) UNIQUE NOT NULL,
-  password       VARCHAR(30)        NOT NULL,
+  password       VARCHAR            NOT NULL,
   authorities    INTEGER            NOT NULL DEFAULT 1 REFERENCES user_authorities (id),
   enabled        BOOLEAN            NOT NULL DEFAULT TRUE,
   join_timestamp TIMESTAMP          NOT NULL DEFAULT CURRENT_TIMESTAMP

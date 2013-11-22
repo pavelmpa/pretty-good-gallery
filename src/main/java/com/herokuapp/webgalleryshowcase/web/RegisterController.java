@@ -10,6 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,6 +36,9 @@ public class RegisterController {
         validatePasswordMatches(user, bindingResult);
         if (bindingResult.hasErrors()) return "register";
 
+        String encodedPassword = encodePassword(user.getPassword());
+        user.setPassword(encodedPassword);
+
         try {
             userDao.addUser(user);
         } catch (DuplicateKeyException dke) {
@@ -54,6 +59,11 @@ public class RegisterController {
             bindingResult.addError(new ObjectError("error", "Passwords doesn't match."));
         }
         return bindingResult;
+    }
+
+    private String encodePassword(String rawPassword) {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(rawPassword);
     }
 
     @RequestMapping(value = "/register")
