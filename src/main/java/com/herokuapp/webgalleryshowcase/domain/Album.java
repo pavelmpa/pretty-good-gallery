@@ -68,11 +68,11 @@ public class Album {
         return created;
     }
 
-    @JsonSerialize(using = JsonDateSerializer.class)
     public void setCreated(Date created) {
         this.created = created;
     }
 
+    @JsonSerialize(using = JsonDateSerializer.class)
     public Date getLastModified() {
         return lastModified;
     }
