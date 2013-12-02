@@ -8,11 +8,11 @@ public interface AlbumDao {
 
     List<Album> retrieveUserAlbums(String userEmail);
 
-    void createAlbum(Album album);
+    Album createAlbum(Album album);
 
     Album retrieveAlbum(int albumId);
 
     boolean deleteAlbum(int albumId);
 
-    void updateAlbum(Album album);
+    Album updateAlbum(Album album);
 }

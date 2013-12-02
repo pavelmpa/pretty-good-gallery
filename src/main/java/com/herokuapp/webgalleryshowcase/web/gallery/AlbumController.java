@@ -2,6 +2,7 @@ package com.herokuapp.webgalleryshowcase.web.gallery;
 
 import com.herokuapp.webgalleryshowcase.dao.AlbumDao;
 import com.herokuapp.webgalleryshowcase.domain.Album;
+import com.herokuapp.webgalleryshowcase.domain.dto.AlbumResponseDto;
 import com.herokuapp.webgalleryshowcase.service.validators.AlbumValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,18 +35,6 @@ public class AlbumController {
     public String viewCreateAlbumPage(Model model) {
         model.addAttribute("album", new Album());
         return "createAlbum";
-    }
-
-    @RequestMapping(value = "/albums/{id}/edit")
-    public String viewEditAlbumPage(@PathVariable int id) {
-        log.debug("Coll method album edit not implemented.");
-        return "notAvailable";
-    }
-
-    @RequestMapping(value = "/albums/{id}/remove")
-    public String viewDeleteAlbumPage(@PathVariable int id) {
-        log.debug("Coll method remove album not implemented.");
-        return "notAvailable";
     }
 
     @RequestMapping(value = "/albums", method = RequestMethod.GET, produces = "application/json")
@@ -80,24 +68,37 @@ public class AlbumController {
 
     @RequestMapping(value = "/albums/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteAlbum(@PathVariable int id) {
+        log.debug("Delete.");
         ResponseEntity<String> response;
+
         if (albumDao.deleteAlbum(id)) {
             response = new ResponseEntity<>("Album has been deleted successfully.", HttpStatus.OK);
         } else {
-            response = new ResponseEntity<>("Album does not exist.", HttpStatus.NO_CONTENT);
+            response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return response;
     }
 
+    @RequestMapping(value = "/albums/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<AlbumResponseDto> editAlbumE(@RequestBody @Valid Album album, @PathVariable int id) {
+        log.debug("editAlbum method PUT");
+        album.setId(id);
+        Album updatedAlbum = albumDao.updateAlbum(album);
+
+        String message = "Album has been edited.";
+        AlbumResponseDto albumResponse = new AlbumResponseDto(message, updatedAlbum);
+
+        return new ResponseEntity<>(albumResponse, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/albums", method = RequestMethod.POST)
-    public String createAlbum(@ModelAttribute("album") @Valid Album album,
-                              BindingResult bindingResult,
-                              Principal principal) {
-        if (bindingResult.hasErrors()) {
-            return "createAlbum";
-        }
+    public ResponseEntity<AlbumResponseDto> createAlbum(@RequestBody @Valid Album album, Principal principal) {
         album.setUserOwner(principal.getName());
-        albumDao.createAlbum(album);
-        return "redirect:/albums";
+        Album createdAlbum = albumDao.createAlbum(album);
+
+        String message = "Album has been created successfully.";
+        AlbumResponseDto albumResponse = new AlbumResponseDto(message, createdAlbum);
+
+        return new ResponseEntity<>(albumResponse, HttpStatus.CREATED);
     }
 }

@@ -5,77 +5,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Test</title>
+    <title>Albums</title>
     <link rel="stylesheet" type="text/css" href="<spring:url value="/resources/css/bootstrap.css" />"/>
     <link rel="stylesheet" type="text/css" href="<spring:url value="/resources/css/templates.css" />"/>
-    <style type="text/css" media="screen">
-        table tr td a {
-            display: block;
-            height: 100%;
-            width: 100%;
-        }
-
-        .album-edit, .album-delete {
-            text-align: center;
-            width: 20px;
-            height: 20px;
-            border-radius: 5px;
-        }
-
-        .album-edit:hover, .album-delete:hover {
-            background: #333333;
-        }
-
-        .alert-box {
-            top: 0;
-            /*left: 5%;*/
-            position: fixed;
-            width: 100%;
-            height: auto;
-            margin: 0;
-            padding: 0;
-            list-style-type: none;
-            z-index: 9999999;
-        }
-
-        .alert {
-            text-align: center;
-            margin-bottom: 0;
-        }
-
-        #wait-dialog {
-            height: 50px;
-            width: 50px;
-            background: #000000 url('/resources/img/fancybox_loading.gif') center center no-repeat;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            margin-top: -22px;
-            margin-left: -22px;
-            opacity: 0.8;
-            cursor: pointer;
-            z-index: 8060;
-        }
-
-        .description {
-            max-width: 300px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="<spring:url value="/resources/css/validate.css" />"/>
+    <link rel="stylesheet" type="text/css" href="<spring:url value="/resources/css/albums-list.css" />"/>
 </head>
 <body>
 <div id="wrap">
     <div class="container">
         <jsp:include page="templates/pageHead.jsp"/>
         <div id="albums-holder">
+            <div class="text-center">
+                <a id="create-album" class="btn btn-primary btn-large" href="#">
+                    Create new album <i class="icon-plus icon-white"></i>
+                </a>
+            </div>
             <table class="table table-hover">
                 <thead>
                 <tr>
                     <th>#</th>
                     <th>Title</th>
                     <th>Description</th>
+                    <th>Images</th>
                     <th>Created</th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -86,35 +38,30 @@
                     <tr id="${album.id}">
                         <td>${varStatus.index + 1}</td>
                         <td class="title">
-                        <a href="<spring:url value="/albums/${album.id}" />">${album.title}</a>
+                            <a href="<spring:url value="/albums/${album.id}" />">${album.title}</a>
                         </td>
-                        <td class="description">
-                        <c:if test="${album.description eq null}">
-                                <span style="color: #b3b3b3">No description</span>
-                            </c:if>
-                                ${album.description}
-                        </td>
+                        <c:choose>
+                            <c:when test="${empty album.description}">
+                                <td class="no-description">&#8212</td>
+                            </c:when>
+                            <c:when test="${not empty album.description}">
+                                <td class="description">${album.description}</td>
+                            </c:when>
+                        </c:choose>
+                        <td>${album.numberOfImages}</td>
                         <td>${album.created}</td>
                         <td>
-                            <a class="album-edit" href="<spring:url value="/albums/${album.id}/edit" />">
-                            <i class="icon-edit"></i>
+                            <a class="album-edit" href="#${album.id}">
+                                <i class="icon-edit"></i>
                             </a>
                         </td>
                         <td>
-                            <a class="album-delete" href="#${album.id}" data-album-id="${album.id}"
-                               onclick="deleteAlbum(this)" data-toggle="modal" data-target="#modal">
-                            <i class="icon-remove"></i>
+                            <a class="album-delete" href="#${album.id}">
+                                <i class="icon-remove"></i>
                             </a>
                         </td>
                     </tr>
                 </c:forEach>
-                <tr>
-                    <td colspan="6">
-                        <a href="<spring:url value="/albums/create" />">
-                            Create new album <i class="icon-plus"></i>
-                        </a>
-                    </td>
-                </tr>
                 </tbody>
             </table>
         </div>
@@ -132,8 +79,26 @@
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-        <a id="confirm-delete" href="#" class="btn btn-danger">Delete album</a>
+        <a id="confirm-delete" href="" class="btn btn-danger">Delete album</a>
     </div>
+</div>
+<div id="edit-dialog" class="modal hide fade" data-album-id="">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Empty</h3>
+    </div>
+    <form id="edit-form" name="album" action="" method="">
+        <div class="modal-body">
+            <label for="title">Title</label>
+            <input id="title" class="input-xxlarge" type="text" name="title" value=""/>
+            <label for="description">Description</label>
+            <textarea id="description" class="input-xxlarge area-limits" rows="4" name="description"></textarea>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <input class="btn btn-primary" type="submit" value="Save"/>
+        </div>
+    </form>
 </div>
 <div id="wait-dialog" class="modal hide fade"></div>
 <ul class="alert-box"></ul>
@@ -141,6 +106,7 @@
 <script src="<spring:url value="/resources/js/bootstrap.js"/>"></script>
 <script src="<spring:url value="/resources/js/templates.js" />"></script>
 <script src="<spring:url value="/resources/js/alert-box.js" />"></script>
+<script src="<spring:url value="/resources/js/jquery.validate.js"/>"></script>
 <script src="<spring:url value="/resources/js/album.js" />"></script>
 </body>
 </html>

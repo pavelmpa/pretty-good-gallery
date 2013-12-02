@@ -21,9 +21,9 @@ import java.util.Map;
 public class AlbumDaoJdbcTemplate implements AlbumDao {
 
     private final static String ADD_ALBUM = "INSERT INTO albums (title, description, owner_user_id) " +
-            "VALUES (:title, :description, (SELECT id FROM users WHERE email = :userOwner))";
+            "VALUES (:title, :description, (SELECT id FROM users WHERE email = :userOwner)) RETURNING (album_id)";
 
-    private final static String UPDATE_ALBUM = "UPDATE albums SET  title = :title, description = :description WHERE album_id = :albumId;";
+    private final static String UPDATE_ALBUM = "UPDATE albums SET  title = :title, description = :description WHERE album_id = :id RETURNING (album_id)";
 
     private final static String DELETE_ALBUM = "DELETE FROM albums WHERE album_id = :albumId";
 
@@ -45,9 +45,11 @@ public class AlbumDaoJdbcTemplate implements AlbumDao {
     }
 
     @Override
-    public void createAlbum(Album album) {
+    public Album createAlbum(Album album) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(album);
-        jdbcTemplate.update(ADD_ALBUM, params);
+        int newAlbumId = jdbcTemplate.queryForObject(ADD_ALBUM, params, Integer.class);
+
+        return this.retrieveAlbum(newAlbumId);
     }
 
     @Override
@@ -63,9 +65,10 @@ public class AlbumDaoJdbcTemplate implements AlbumDao {
     }
 
     @Override
-    public void updateAlbum(Album album) {
+    public Album updateAlbum(Album album) {
         SqlParameterSource updateParams = new BeanPropertySqlParameterSource(album);
-        jdbcTemplate.update(UPDATE_ALBUM, updateParams);
+        int updatedAlbumId = jdbcTemplate.queryForObject(UPDATE_ALBUM, updateParams, Integer.class);
+        return this.retrieveAlbum(updatedAlbumId);
     }
 
     @Override

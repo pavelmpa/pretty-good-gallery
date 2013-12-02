@@ -19,7 +19,11 @@
         <security:intercept-url pattern="/gallery/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
         <security:intercept-url pattern="/albums/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
 
-        <security:form-login login-page="/login" authentication-failure-url="/login?failure=true"/>
+        <security:form-login
+                login-page="/login"
+                authentication-failure-url="/login?failure=true"
+                always-use-default-target="true"
+                default-target-url="/"/>
         <security:logout delete-cookies="JSESSIONID"/>
     </security:http>
 
