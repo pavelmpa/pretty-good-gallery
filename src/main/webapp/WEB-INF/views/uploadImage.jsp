@@ -1,67 +1,86 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
-<head>
+<head lang="en">
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="<c:url value="/resources/ico/favicon.ico"/>">
+
     <title>Uploading new something new</title>
-    <link rel="stylesheet" type="text/css" href="<spring:url value="/resources/css/bootstrap.css" />"/>
-    <link rel="stylesheet" type="text/css" href="<spring:url value="/resources/css/bootstrap-fileupload.min.css" />"/>
-    <link rel="stylesheet" type="text/css" href="<spring:url value="/resources/css/templates.css" />"/>
-    <link rel="stylesheet" type="text/css" href="<spring:url value="/resources/css/validate.css" />"/>
+
+    <!-- Bootstrap core CSS -->
+    <link href="<c:url value="/resources/css/bootstrap.css"/>" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bootstrap-fileupload.css"/>">
+
+    <link href="<c:url value="/resources/css/template.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/alert-box.css"/>" rel="stylesheet">
+    <style type="text/css">
+        .fileinput .thumbnail > img {
+            max-height: 390px;
+        }
+
+        #image-upload-progress {
+            margin-top: 30px;
+        }
+    </style>
 </head>
 <body>
 <div id="wrap">
-    <div class="container">
-        <jsp:include page="templates/pageHead.jsp"/>
-        <c:if test="${param.result eq 'success'}">
-            <p class="alert alert-success">
-                <strong>Upload successful!</strong>
-            </p>
-        </c:if>
-        <c:if test="${param.result eq 'fault'}">
-            <p class="alert alert-error">
-                <strong>Upload failed.</strong>
-            </p>
-        </c:if>
-        <%
-            String[] path = request.getAttribute("javax.servlet.forward.request_uri").toString().split("/upload");
-            String url = path[0] + "/images";
-        %>
-        <div class="fileupload fileupload-new text-center" data-provides="fileupload">
-            <div class="fileupload-new thumbnail" style="width: 480px; height: 320px;">
-                <img src="http://www.placehold.it/480x320/EFEFEF/AAAAAA&text=no+image"/>
+    <!-- NAVBAR
+    ================================================== -->
+    <jsp:include page="templates/navbar.jsp"/>
+    <!-- CONTENT
+    ================================================== -->
+    <div class="container text-center" style="padding-top: 10px">
+        <h2>Upload new picture</h2>
+
+        <form>
+            <div class="fileinput fileinput-new" data-provides="fileinput">
+                <div class="fileinput-new thumbnail" style="min-width: 480px; min-height: 320px;">
+                    <img src="http://www.placehold.it/480x320/EFEFEF/AAAAAA&text=no+image" alt="Please select image">
+                </div>
+                <div class="fileinput-preview fileinput-exists thumbnail"
+                     style="max-width: 600px; max-height: 400px;"></div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="title" placeholder="Title" name="title">
+                </div>
+                <div>
+                    <span class="btn btn-default btn-file">
+                        <span class="fileinput-new">Select image</span>
+                        <span class="fileinput-exists">Change</span>
+                        <input id="uploaded-file" type="file" name="file" accept="image/*">
+                    </span>
+                    <button class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</button>
+                    <button id="upload" class="btn btn-primary" type="button">Upload</button>
+                </div>
             </div>
-            <div class="fileupload-preview fileupload-exists thumbnail"
-                 style="max-width: 480px; max-height: 320px; line-height: 20px;"></div>
-            <form id="image-upload-form" method="post" action="<%=url%>" enctype="multipart/form-data">
-                <fieldset>
-                    <legend>Upload new image</legend>
-                    <input class="input-large" style="height: 30px; margin-bottom: 0;" name="title" type="text" value=""
-                           placeholder="Title"/>
-                            <span class="btn btn-file">
-                                <span class="fileupload-new">Select picture</span>
-                                <span class="fileupload-exists">Change</span>
-                                <input id="file-upload-input" name="file" type="file" accept="image/*" required="required"/>
-                            </span>
-                    <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
-                    <input type="submit" value="Upload" class="btn btn-success form-upload" style="height: 30px;"/>
-                </fieldset>
-            </form>
+        </form>
+        <div id="image-upload-progress" class="progress progress-striped hidden">
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                <span class="sr-only">0% Complete</span>
+            </div>
         </div>
-        <div id="errors_block"></div>
     </div>
-    <div id="push"></div>
 </div>
+<!-- FOOTER
+================================================== -->
 <jsp:include page="templates/footer.jsp"/>
-<script src="<spring:url value="/resources/js/jquery-2.0.0.js" />"></script>
-<script src="<spring:url value="/resources/js/bootstrap.js" />"></script>
-<script src="<spring:url value="/resources/js/bootstrap-fileupload.js" />"></script>
-<script src="<spring:url value="/resources/js/jquery.validate.js" />"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/additional-methods.js"></script>
-<script src="<spring:url value="/resources/js/templates.js" />"></script>
-<script src="<spring:url value="/resources/js/image.upload.validate.js" />"></script>
+<ul class="alert-box"></ul>
+<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script src="<c:url value="/resources/js/bootstrap.js"/>"></script>
+<script src="<c:url value="/resources/js/bootstrap-fileupload.js"/>"></script>
+<script src="<c:url value="/resources/js/alert-box.js"/>"></script>
+<script src="<c:url value="/resources/js/imageUpload.js"/>"></script>
 </body>
 </html>

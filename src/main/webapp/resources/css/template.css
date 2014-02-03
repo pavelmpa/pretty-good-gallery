@@ -1,0 +1,44 @@
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+    color: #ff1493;
+}
+
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus {
+    background-color: #080808;
+    color: #ff1493;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #ffffff;
+}
+
+body {
+    padding-top: 50px;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html,
+body {
+    height: 100%;
+}
+
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    margin: 0 auto -50px;
+    padding: 0 0 50px;
+}
+
+#footer {
+    height: 50px;
+    border: 1px solid #eeeeee;
+    padding-top: 10px;
+}
+
+/*.container{*/
+/*width: 900px; *//*FIXME: Select width*/
+/*}*/

@@ -1,35 +1,39 @@
 /**
- * Shows alerts in the top of screen.
+ * Created by Paul on 14.12.13.
  */
 
-function alertError(message) {
-    abstractAlert("Error!", 'alert-error', message);
-}
+var alertBox = {};
+(function (context) {
+    alertBox.alertError = function (message) {
+        abstractAlert("Error!", 'alert-danger', message);
+    };
 
-function alertWarning(message) {
-    abstractAlert("Warning!", '', message);
-}
+    alertBox.alertWarning = function (message) {
+        abstractAlert("Warning!", '', message);
+    };
 
-function alertSuccess(message) {
-    abstractAlert("Success!", 'alert-success', message);
-}
+    alertBox.alertSuccess = function (message) {
+        abstractAlert("Success!", 'alert-success', message);
+    };
 
-function alertInfo(message) {
-    abstractAlert("Info!", 'alert-info', message);
-}
+    alertBox.alertInfo = function (message) {
+        abstractAlert("Info!", 'alert-info', message);
+    };
 
-function abstractAlert(type, alertClass, message) {
-    var alert = '<li class="alert ' + alertClass + '" style="overflow: hidden"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>' + type + '</strong> ' + message + '</li>';
-    var alertBox = $('.alert-box');
+    function abstractAlert(type, alertClass, message) {
+//    var alert = '<li class="alert ' + alertClass + '" style="overflow: hidden"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>' + type + '</strong> ' + message + '</li>';
+        var alert = '<li class="alert alert-dismissable ' + alertClass + '"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong>' + type + '</strong> ' + message + '</li>';
+        var alertBox = $('.alert-box');
 
-    if (alertBox.children('li').size() < 3) {
-        alertBox.append(alert);
-    } else {
-        alertBox.find("li").first().remove();
-        alertBox.append(alert);
+        if (alertBox.children('li').size() < 3) {
+            alertBox.append(alert);
+        } else {
+            alertBox.find("li").first().remove();
+            alertBox.append(alert);
+        }
+        var item = alertBox.find("li").last();
+        setTimeout(function () {
+            $(item).remove();
+        }, 5000);
     }
-    var item = alertBox.find("li").last();
-    setTimeout(function () {
-        $(item).remove();
-    }, 5000);
-}
+})(alertBox);

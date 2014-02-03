@@ -22,7 +22,7 @@ $(document).ready(function () {
     $editForm.on("submit", function (event) {
         event.preventDefault();
 
-        if (isPreviousAjaxRequestComplete && isWaitDialogHide && $editForm.valid()) {
+        if (isPreviousAjaxRequestComplete && isWaitDialogHide && $editForm.validate()) {
             var url = document.URL.replace("#", "/");
             var type = $editForm.attr("method");
             var data = $editForm.serializeObject();
@@ -127,9 +127,9 @@ $(document).ajaxSend(function () {
     isWaitDialogHide = false;
     $('#wait-dialog').modal();
 }).ajaxComplete(function () {
-        isPreviousAjaxRequestComplete = true;
-        $('#wait-dialog').modal('hide');
-    });
+    isPreviousAjaxRequestComplete = true;
+    $('#wait-dialog').modal('hide');
+});
 
 var showErrors = function (data) {
     $('#field-errors').remove();

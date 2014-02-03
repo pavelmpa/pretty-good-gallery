@@ -1,0 +1,130 @@
+/*!
+ * Displaying album list styles.
+ */
+
+/*!
+ * Common album list styles
+ */
+#album-list-properties {
+    margin-top: 10px;
+}
+
+#album-list-properties > div > div > a > span {
+    font-size: 20px;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/*!
+ * Style used to displaying main album list.
+ */
+#album-holder {
+    display: block;
+    max-width: 940px;
+    margin-left: auto;
+    margin-right: auto;
+
+    text-align: left;
+}
+
+.album-item {
+    display: inline-block;
+    width: 300px;
+    height: 200px;
+
+    float: left;
+    position: relative;
+    bottom: 0;
+    overflow: hidden;
+
+    margin: 0 0 10px 10px;
+    padding: 0;
+}
+
+.thumb {
+    width: 300px;
+    height: 200px;
+}
+
+.thumb:hover .title-container {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.title-container {
+    width: 300px;
+    height: 50px;
+    position: absolute;
+    bottom: 0;
+    transition: 0.5s;
+}
+
+.title-container > p {
+    color: #ffffff;
+    opacity: 1;
+    margin: 0;
+    padding: 5px 5px 5px 5px;
+}
+
+/*!
+ * Style used to managed album list.
+ */
+a.album-edit, a.album-delete {
+    display: block;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+a.album-edit > span, a.album-delete > span {
+    padding-top: 2px;
+    color: #333333;
+    font-size: 14px;
+}
+
+.album-edit:hover, .album-delete:hover {
+    background: #333333;
+}
+
+.album-edit:hover span, .album-delete:hover span {
+    color: #ffffff;
+}
+
+.description {
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*!
+ * Style used to displaying errors in modal window.
+ */
+.error-field {
+    border-color: #E9322D;
+    box-shadow: 0 0 6px #F8B9B7;
+}
+
+/*!
+ * Shows while AJAX request.
+ */
+#wait-dialog {
+    height: 50px;
+    width: 50px;
+    background: #000000 url('../img/fancybox_loading.gif') center center no-repeat;
+    border-radius: 5px;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    margin-top: -22px;
+    margin-left: -22px;
+
+    opacity: 0.8;
+    z-index: 8060;
+    overflow: hidden;
+}
