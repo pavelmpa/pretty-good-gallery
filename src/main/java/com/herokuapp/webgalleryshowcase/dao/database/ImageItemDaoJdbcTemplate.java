@@ -26,8 +26,8 @@ public class ImageItemDaoJdbcTemplate implements ImageItemDao {
     private Logger log = LoggerFactory.getLogger(ImageItemDaoJdbcTemplate.class);
 
     private static final String UPLOAD_IMAGE = "INSERT INTO image_items " +
-            "(file_name, content_type, title, file_content, album_holder_id)" +
-            " VALUES (:fileName, :contentType, :title, :fileContent, :albumHolderId)";
+            "(file_name, content_type, title, file_content, album_holder_id, width, height)" +
+            " VALUES (:fileName, :contentType, :title, :fileContent, :albumHolderId, :width, :height)";
 
     private static final String RETRIEVE_IMAGE = "SELECT * FROM image_items " +
             "WHERE id = :imageItemId AND album_holder_id = :albumId";
@@ -40,8 +40,12 @@ public class ImageItemDaoJdbcTemplate implements ImageItemDao {
                     "FROM image_items WHERE id = :imageId AND album_holder_id = :albumId";
 
     private static final String RETRIEVE_THUMBNAILS_lIST =
-            "SELECT id, file_name, upload_timestamp, title, content_type FROM image_items " +
+            "SELECT id, file_name, upload_timestamp, title, content_type, width, height FROM image_items " +
                     "WHERE album_holder_id = :albumId ORDER BY id LIMIT :amount OFFSET :fromItem";
+
+    private static final String RETRIEVE_EXPLORE_THUMBNAILS_lIST =
+            "SELECT id, file_name, upload_timestamp, title, content_type, width, height, album_holder_id " +
+                    "FROM image_items ORDER BY id LIMIT :amount OFFSET :fromItem";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -75,18 +79,7 @@ public class ImageItemDaoJdbcTemplate implements ImageItemDao {
     }
 
     @Override
-    public List<Integer> retrieveThumbnailsIdList(int albumId, int fromItem, int amount) {
-
-        Map<String, Integer> paramMap = new HashMap<>();
-        paramMap.put("amount", amount);
-        paramMap.put("from_item", fromItem);
-        paramMap.put("albumId", albumId);
-
-        return jdbcTemplate.queryForList(RETRIEVE_THUMBNAIL_ID_LIST, paramMap, Integer.class);
-    }
-
-    @Override
-    public List<ImageItem> retrieveThumbnailsId(int albumId, int fromItem, int amount) {
+    public List<ImageItem> retrieveThumbnailListByAlbum(int albumId, int fromItem, int amount) {
 
         Map<String, Integer> paramMap = new HashMap<>();
         paramMap.put("amount", amount);
@@ -94,6 +87,15 @@ public class ImageItemDaoJdbcTemplate implements ImageItemDao {
         paramMap.put("albumId", albumId);
 
         return jdbcTemplate.query(RETRIEVE_THUMBNAILS_lIST, paramMap, thumbnailRowMapper);
+    }
+
+    @Override
+    public List<ImageItem> retrieveExploreThumbnailList(int fromItem, int amount) {
+        Map<String, Integer> paramMap = new HashMap<>();
+        paramMap.put("amount", amount);
+        paramMap.put("fromItem", fromItem);
+
+        return jdbcTemplate.query(RETRIEVE_EXPLORE_THUMBNAILS_lIST, paramMap, thumbnailRowMapper);
     }
 
     private final RowMapper<ImageItem> imageItemRowMapper = new RowMapper<ImageItem>() {
@@ -115,14 +117,17 @@ public class ImageItemDaoJdbcTemplate implements ImageItemDao {
 
     private final RowMapper<ImageItem> thumbnailRowMapper = new RowMapper<ImageItem>() {
         @Override
-        public ImageItem mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+        public ImageItem mapRow(ResultSet rs, int rowNum) throws SQLException {
             ImageItem imageItem = new ImageItem();
 
-            imageItem.setId(resultSet.getInt("id"));
-            imageItem.setFileName(resultSet.getString("file_name"));
-            imageItem.setTitle(resultSet.getString("title"));
-            imageItem.setContentType(resultSet.getString("content_type"));
-            imageItem.setUploadTime(resultSet.getDate("upload_timestamp"));
+            imageItem.setId(rs.getInt("id"));
+            imageItem.setFileName(rs.getString("file_name"));
+            imageItem.setTitle(rs.getString("title"));
+            imageItem.setContentType(rs.getString("content_type"));
+            imageItem.setUploadTime(rs.getDate("upload_timestamp"));
+            imageItem.setAlbumHolderId(rs.getInt("album_holder_id"));
+            imageItem.setWidth(rs.getInt("width"));
+            imageItem.setHeight(rs.getInt("height"));
 
             return imageItem;
         }

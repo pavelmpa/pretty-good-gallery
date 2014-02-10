@@ -11,6 +11,8 @@ public class ImageItem {
     private String contentType;
     @Length(max = 200, message = "Image title too long. Maximum length 200 symbols.")
     private String title;
+    private int height;
+    private int width;
     private Integer albumHolderId;
     private byte[] fileContent;
     private Date uploadTime;
@@ -69,5 +71,21 @@ public class ImageItem {
 
     public void setUploadTime(Date uploadTime) {
         this.uploadTime = uploadTime;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
     }
 }

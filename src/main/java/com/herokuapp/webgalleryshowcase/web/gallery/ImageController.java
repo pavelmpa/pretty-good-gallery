@@ -2,10 +2,13 @@ package com.herokuapp.webgalleryshowcase.web.gallery;
 
 import com.herokuapp.webgalleryshowcase.dao.ImageItemDao;
 import com.herokuapp.webgalleryshowcase.domain.ImageItem;
+import com.herokuapp.webgalleryshowcase.service.ImageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +25,8 @@ public class ImageController {
 
     @Autowired
     private ImageItemDao imageItemDao;
+    @Autowired
+    private ImageService imageService;
 
     @RequestMapping("/upload")
     public String displayUploadImage() {
@@ -52,58 +57,35 @@ public class ImageController {
     public
     @ResponseBody
     List<ImageItem> uploadImage(@PathVariable int albumId, @RequestParam int fromItem) {
-        final int amount = 12;
-        return imageItemDao.retrieveThumbnailsId(albumId, fromItem, amount);
+        final int amount = 30;
+        return imageItemDao.retrieveThumbnailListByAlbum(albumId, fromItem, amount);
     }
 
     @RequestMapping(value = "/images", method = RequestMethod.POST)
-    public String uploadFile(@PathVariable Integer albumId,
-                             @RequestParam("title") String title,
-                             @RequestParam("file") MultipartFile file) {
-
-        String returningPath = "redirect:/albums/" + albumId + "/upload?result=";
-        final String statusFault = "fault";
-        final String statusSuccess = "success";
-
-        if (file.isEmpty() | !isContentTypeValid(file.getContentType())) {
-            log.info("Trying upload empty or wrong MIME type file.");
-            return returningPath + statusFault;
+    public ResponseEntity<String> uploadFile(@PathVariable Integer albumId,
+                                             @RequestParam("title") String title,
+                                             @RequestParam("file") MultipartFile file) throws IOException {
+        log.debug("Upload new image.");
+        if (file.isEmpty()) {
+            return new ResponseEntity<>("Uploading bad file problem.", HttpStatus.BAD_REQUEST);
         }
 
-        ImageItem imageItem = new ImageItem();
-        String fileName = file.getOriginalFilename();
-
-        imageItem.setFileName(replaceSpacesWithUnderscore(fileName));
-        imageItem.setContentType(file.getContentType());
-        imageItem.setAlbumHolderId(albumId);
-        imageItem.setTitle(title);
-
-        String uploadStatus;
-        try {
-            imageItem.setFileContent(file.getBytes());
-            imageItemDao.uploadImage(imageItem);
-            uploadStatus = statusSuccess;
-        } catch (IOException ioe) {
-            log.error("IO exception while uploading file", ioe);
-            uploadStatus = statusFault;
-        } catch (Exception e) {
-            log.error("Exception while uploading file", e);
-            uploadStatus = statusFault;
+        if (!isContentTypeValid(file.getContentType())) {
+            return new ResponseEntity<>("This type of file does not support.", HttpStatus.BAD_REQUEST);
         }
 
-        return returningPath + uploadStatus;
+        imageService.uploadImage(file, title, albumId);
+        return new ResponseEntity<>("Image uploaded successfully.", HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/images/{imageId}", method = RequestMethod.DELETE)
-    public boolean deleteImage(@PathVariable("imageId") Integer imageId) {
-        return false;
+    public ResponseEntity<Object> deleteImage(@PathVariable("imageId") Integer imageId) {
+        log.debug("Delete image " + imageId);
+        Object response = "Image " + imageId + "has been deleted successfully.";
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     private boolean isContentTypeValid(String fileContentType) {
-        return fileContentType.equals(MediaType.IMAGE_JPEG_VALUE) | fileContentType.equals(MediaType.IMAGE_PNG_VALUE);
-    }
-
-    private String replaceSpacesWithUnderscore(String string) {
-        return string.replace(' ', '_');
+        return fileContentType.equals(MediaType.IMAGE_JPEG_VALUE) || fileContentType.equals(MediaType.IMAGE_PNG_VALUE);
     }
 }

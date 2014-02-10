@@ -2,6 +2,7 @@ package com.herokuapp.webgalleryshowcase.web;
 
 import com.herokuapp.webgalleryshowcase.dao.database.exceptions.ImageNotFoundException;
 import com.herokuapp.webgalleryshowcase.domain.dto.ValidationErrorDto;
+import com.herokuapp.webgalleryshowcase.service.exceptions.FileUploadException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -67,13 +68,17 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = {MaxUploadSizeExceededException.class})
-    protected ResponseEntity<Object> handledMaxUploadExceeded(MaxUploadSizeExceededException ex, WebRequest request) {
+    protected ResponseEntity<String> handledMaxUploadExceeded(MaxUploadSizeExceededException ex) {
         log.error("Max upload file size exceeded.", ex);
 
-        String bodyOfResponse = "Max upload file size exceeded.";
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        String message = "Max upload file size exceeded.";
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    }
 
-        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), httpStatus, request);
+    @ExceptionHandler(value = {FileUploadException.class})
+    protected ResponseEntity<String> handleFileUploadException(FileUploadException ex) {
+        log.debug(ex.getMessage());
+        return new ResponseEntity<>("File uploading problem.", HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     @Override

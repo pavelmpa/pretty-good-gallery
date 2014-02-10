@@ -9,19 +9,19 @@ $(document).ready(function () {
             closeEffect: 'none'
         }
     );
-    thumbnailLoader.loadNewThumbnails();
+//    squareThumbLayout.loadNewThumbnails();
 });
 
-$(window).scroll(function () {
-    if ($(document).height() - 50 <= $(window).scrollTop() + $(window).height()) {
-        if (thumbnailLoader.isPreviousEventComplete && thumbnailLoader.isDataAvailable) {
-            thumbnailLoader.isPreviousEventComplete = false;
-            thumbnailLoader.loadNewThumbnails();
-        }
-    }
-});
+//$(window).scroll(function () {
+//    if ($(document).height() - 50 <= $(window).scrollTop() + $(window).height()) {
+//        if (squareThumbLayout.isPreviousEventComplete && squareThumbLayout.isDataAvailable) {
+//            squareThumbLayout.isPreviousEventComplete = false;
+//            squareThumbLayout.loadNewThumbnails();
+//        }
+//    }
+//});
 
-var thumbnailLoader = {};
+var squareThumbLayout = {};
 
 (function (context) {
     context.isPreviousEventComplete = false;
@@ -43,20 +43,48 @@ var thumbnailLoader = {};
         var thumbnails = [];
 
         $.each(json, function (key, value) {
-            thumbnails.push(createThumbItem(value.id, value.title, value.fileName));
+            thumbnails.push(createThumbItem(value));
         });
 
         $("#thumbnails").append(thumbnails.join(''));
 
         currentAmount += json.length;
-        isPreviousEventComplete = true;
+        context.isPreviousEventComplete = true;
 
-        if (json.length < availableLoadItems) isDataAvailable = false;
+        if (json.length < availableLoadItems) context.isDataAvailable = false;
     }
 
-    function createThumbItem(id, title, fileName) {
-        var thumbUrl = loadThumbnailsUrl + id + '/' + fileName;
-        if (!title) title = "";
-        return '<li><a class="thumbnail fancybox" rel="gallery" href="' + thumbUrl + '" title="' + title + '"><img class="picture" src="' + thumbUrl + '"></a></li>';
+    function createThumbItem(image) {
+        var thumbUrl = loadThumbnailsUrl + image.id + '/' + image.fileName;
+
+        if (!image.title) {
+            image.title = "";
+        }
+
+        var calculatedStyle = calculateImageSize(image.width, image.height);
+
+        return '<li><a class="fancybox" rel="gallery" href="' + thumbUrl + '" title="' + image.title + '"><img class="picture" src="' + thumbUrl + '" style="' + calculatedStyle + '"></a></li>';
     }
-})(thumbnailLoader);
+
+    var thumbHeight = 200, thumbWidth = 200;
+    var thumbRatio = thumbWidth / thumbHeight;
+
+    function calculateImageSize(width, height) {
+        var imgRatio = width / height;
+
+        var calculatedStyle;
+
+        if (imgRatio > thumbRatio) {
+            calculatedStyle = "height: 100%; ";
+            var marginLeft = (thumbHeight * imgRatio - thumbHeight * thumbRatio) / 2;
+            calculatedStyle = calculatedStyle + "margin-left: " + -marginLeft + ";";
+        } else {
+            calculatedStyle = "width: 100%; ";
+            var marginTop = (thumbWidth * imgRatio - thumbWidth * thumbRatio) / 2;
+            calculatedStyle = calculatedStyle + "margin-top: " + marginTop + ";";
+        }
+
+        return calculatedStyle;
+    }
+
+})(squareThumbLayout);

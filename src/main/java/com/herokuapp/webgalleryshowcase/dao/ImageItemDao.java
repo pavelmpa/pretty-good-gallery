@@ -10,7 +10,7 @@ public interface ImageItemDao {
 
     ImageItem retrieveImage(int albumId, int imageItemId);
 
-    List<Integer> retrieveThumbnailsIdList(int albumId, int fromItem, int amount);
+    List<ImageItem> retrieveThumbnailListByAlbum(int albumId, int fromItem, int amount);
 
-    List<ImageItem> retrieveThumbnailsId(int albumId, int fromItem, int amount);
+    List<ImageItem> retrieveExploreThumbnailList(int fromItem, int amount);
 }
