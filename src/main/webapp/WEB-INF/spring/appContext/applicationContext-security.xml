@@ -16,8 +16,9 @@
     <security:http auto-config="true" use-expressions="true" create-session="never" disable-url-rewriting="true">
         <security:intercept-url pattern="/" access="permitAll"/>
         <security:intercept-url pattern="/profile" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
-        <security:intercept-url pattern="/gallery/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
-        <security:intercept-url pattern="/albums/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+        <security:intercept-url pattern="/albums" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+        <security:intercept-url pattern="/albums/*" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+        <!--<security:intercept-url pattern="/gallery/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>-->
 
         <security:form-login
                 login-page="/login"

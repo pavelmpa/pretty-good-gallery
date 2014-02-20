@@ -9,17 +9,17 @@ $(document).ready(function () {
             closeEffect: 'none'
         }
     );
-//    squareThumbLayout.loadNewThumbnails();
+    squareThumbLayout.loadNewThumbnails();
 });
 
-//$(window).scroll(function () {
-//    if ($(document).height() - 50 <= $(window).scrollTop() + $(window).height()) {
-//        if (squareThumbLayout.isPreviousEventComplete && squareThumbLayout.isDataAvailable) {
-//            squareThumbLayout.isPreviousEventComplete = false;
-//            squareThumbLayout.loadNewThumbnails();
-//        }
-//    }
-//});
+$(window).scroll(function () {
+    if ($(document).height() - 50 <= $(window).scrollTop() + $(window).height()) {
+        if (squareThumbLayout.isPreviousEventComplete && squareThumbLayout.isDataAvailable) {
+            squareThumbLayout.isPreviousEventComplete = false;
+            squareThumbLayout.loadNewThumbnails();
+        }
+    }
+});
 
 var squareThumbLayout = {};
 
@@ -27,14 +27,14 @@ var squareThumbLayout = {};
     context.isPreviousEventComplete = false;
     context.isDataAvailable = true;
 
-    var availableLoadItems = 12, currentAmount = 0;
+    var availableLoadItems = 30, currentAmount = 0;
 
     var loadThumbnailsUrl = document.URL + "/images/";
 
     context.loadNewThumbnails = function () {
-        $.getJSON(loadThumbnailsUrl, { fromItem: currentAmount }).done(
-                showImages
-            ).fail(function () {
+        $.getJSON(loadThumbnailsUrl, { fromItem: currentAmount, amount: availableLoadItems }).done(
+            showImages
+        ).fail(function () {
                 alertBox.alertError("Something goes wrong.");
             });
     };

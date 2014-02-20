@@ -32,15 +32,12 @@ public class ImageItemDaoJdbcTemplate implements ImageItemDao {
     private static final String RETRIEVE_IMAGE = "SELECT * FROM image_items " +
             "WHERE id = :imageItemId AND album_holder_id = :albumId";
 
-    private static final String RETRIEVE_THUMBNAIL_ID_LIST = "SELECT id FROM image_items " +
-            "WHERE album_holder_id = :albumId LIMIT :amount OFFSET :from_item";
-
     private static final String RETRIEVE_IMAGE_INFO =
             "SELECT id, file_name, content_type, upload_timestamp, title, album_holder_id " +
                     "FROM image_items WHERE id = :imageId AND album_holder_id = :albumId";
 
     private static final String RETRIEVE_THUMBNAILS_lIST =
-            "SELECT id, file_name, upload_timestamp, title, content_type, width, height FROM image_items " +
+            "SELECT id, file_name, upload_timestamp, title, content_type, width, height, album_holder_id FROM image_items " +
                     "WHERE album_holder_id = :albumId ORDER BY id LIMIT :amount OFFSET :fromItem";
 
     private static final String RETRIEVE_EXPLORE_THUMBNAILS_lIST =

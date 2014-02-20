@@ -37,8 +37,8 @@
         <div id="album-list-properties" class="row">
             <div class="col-xs-6 col-md-4 text-left">
                 <div class="btn-group">
-                    <a class="btn btn-default" href="#">
-                        <span class="glyphicon glyphicon-th"></span>
+                    <a class="btn btn-default" href="<c:url value="/albums"/>">
+                    <span class="glyphicon glyphicon-th"></span>
                     </a>
                     <a class="btn btn-default active" href="#">
                         <span class="glyphicon glyphicon-th-list"></span>
@@ -59,7 +59,6 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>#</th>
                     <th>Title</th>
                     <th>Description</th>
                     <th>Pictures</th>
@@ -71,7 +70,6 @@
                 <tbody>
                 <c:forEach items="${albums}" var="album" varStatus="varStatus">
                     <tr id="${album.id}">
-                        <td class="number">${varStatus.index + 1}</td>
                         <td class="title">
                             <a href="<c:url value="/albums/${album.id}"/>">${album.title}</a>
                         </td>

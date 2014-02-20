@@ -56,8 +56,7 @@ public class ImageController {
     @RequestMapping(value = "/images", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<ImageItem> uploadImage(@PathVariable int albumId, @RequestParam int fromItem) {
-        final int amount = 30;
+    List<ImageItem> uploadImage(@PathVariable int albumId, @RequestParam int fromItem, @RequestParam int amount) {
         return imageItemDao.retrieveThumbnailListByAlbum(albumId, fromItem, amount);
     }
 

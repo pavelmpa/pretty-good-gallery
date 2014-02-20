@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -15,11 +16,12 @@
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li><a href="<spring:url value="/"/>">Home</a></li>
+                <li><a href="<c:url value="/explore"/>">Explore</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Galleries<b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Gallery<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Explore</a></li>
-                        <li><a href="<spring:url value="/albums"/>">My gallery</a></li>
+                        <li><a href="<spring:url value="/albums"/>">View</a></li>
+                        <li><a href="<c:url value="/albums/manage"/>">Manage</a></li>
                     </ul>
                 </li>
                 <li><a href="#about">About</a></li>
