@@ -44,13 +44,19 @@ hr {
     padding: 0;
 }
 
-.thumb {
+.album-thumb {
     width: 300px;
     height: 200px;
 }
 
-.thumb:hover .title-container {
+.album-thumb:hover .title-container {
     background: rgba(0, 0, 0, 0.6);
+}
+
+.album-thumb a img {
+    top: 0;
+    left: 0;
+    position: absolute;
 }
 
 .title-container {

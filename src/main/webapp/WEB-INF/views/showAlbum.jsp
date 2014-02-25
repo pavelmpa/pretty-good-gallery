@@ -8,7 +8,7 @@
     <title>${album.title}</title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bootstrap.css" />"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.fancybox.css" />"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/templates.css" />"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/template.css" />"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.fancybox.fix.css"/>"/>
     <style type="text/css">
         .btn-round {
@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="span3">
-                    <a class="btn btn-success btn-upload-image"
+                    <a class="btn btn-primary btn-upload-image"
                        href="${requestScope['javax.servlet.forward.request_uri']}/upload">Upload new image <i
                             class="icon-align-center icon-plus icon-white"></i></a>
                 </div>
@@ -61,7 +61,7 @@
 <script src="<c:url value="/resources/js/jquery-2.0.0.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap.js" />"></script>
 <script src="<c:url value="/resources/js/jquery.fancybox.js" />"></script>
-<script src="<c:url value="/resources/js/templates.js" />"></script>
+<script src="<c:url value="/resources/js/template.js"/>"></script>
 <script src="<c:url value="/resources/js/thumbnails-loader.js"/>"></script>
 </body>
 </html>

@@ -21,16 +21,14 @@ $(document).ready(function () {
         event.preventDefault();
 
         if (albumsManager.isPreviousAjaxRequestComplete && albumsManager.isWaitDialogHide && $editForm.valid()) {
-            var x = $editForm.validate();
-            alert(x);
-            var url = document.URL.replace("#", "/");
+            var url = document.URL.replace("#", "").replace("manage", "");
             var type = $editForm.attr("method");
             var data = $editForm.serializeObject();
 
-            var presentation = $('#album-wrap').data('presentation');
+            var presentation = $('#album-list-wrap').data('presentation');
 
             if (type == "POST") {
-                albumsManager.createAlbumRequest(url, data);
+                albumsManager.createAlbumRequest(data);
             } else if (type === "PUT") {
                 albumsManager.editAlbumRequest(url, data);
             }
@@ -39,7 +37,7 @@ $(document).ready(function () {
 
     $('#confirm-delete').on('click', function () {
         $('#delete-dialog').modal('hide');
-        var url = document.URL.replace("#", "/");
+        var url = document.URL.replace("#", "").replace("manage", "");
         albumsManager.deleteAlbumRequest(url);
     });
 
@@ -165,16 +163,16 @@ var albumsManager = {};
         } else if (xhr.status == 204) {
             alertBox.alertWarning(response);
         } else {
-            alertInfo(message);
+            alertBox.alertInfo(message);
         }
         $('#edit-dialog').modal('hide');
     };
 
-    context.createAlbumRequest = function (url, data) {
+    context.createAlbumRequest = function (data) {
         if (context.isPreviousAjaxRequestComplete && context.isWaitDialogHide) {
 
             $.ajax({
-                url: url,
+                url: "/albums",
                 type: "POST",
                 dataType: 'json',
                 contentType: 'application/json; charset=UTF-8',
@@ -195,27 +193,17 @@ var albumsManager = {};
     var successAlbumCreateCallback = function (response, statusCode, xhr) {
         var message = response.message;
         var album = response.album;
-        var presentation = $('#album-wrap').data('presentation');
-        var addNewAlbum;
+        var presentation = $('#album-list-wrap').data('presentation');
 
-        if (presentation === 'table') {
-            addNewAlbum = addAlbumRow;
-        } else if (presentation === 'cells') {
-            addNewAlbum = addAlbumCell;
-        }
-
-        if (xhr.status == 200) {
-            addNewAlbum(album);
+        if (xhr.status == 201) {
+            addAlbumRow(album);
             alertBox.alertSuccess(message);
         } else if (xhr.status == 204) {
             alertBox.alertWarning(response);
         } else {
-            alertBox.alertInfo(message)
+            alertBox.alertWarning(message)
         }
         $('#edit-dialog').modal('hide');
-    };
-
-    var addAlbumCell = function (album) {
     };
 
     var addAlbumRow = function (album) {
@@ -223,10 +211,9 @@ var albumsManager = {};
         var $newRow = $('<tr id="' + id + '"></tr>');
         var td = [];
 
-        td.push($('<td>' + getNumberCell() + '</td>'));
         td.push($('<td class="title"><a href="/albums/' + id + '">' + album.title + '</a></td>'));
         td.push(getDescription(album.description));
-        td.push($('<td>' + album.numberOfImages + '</td>'));
+        td.push($('<td><span class="badge">' + album.numberOfImages + '</span></td>'));
         td.push($('<td>' + album.created + '</td>'));
         td.push($('<td><a class="album-edit" href="#' + id + '"><span class="glyphicon glyphicon-edit"></span></a></td>'));
         td.push($('<td><a class="album-delete" href="#' + id + '"><span class="glyphicon glyphicon-remove"></span></i></a></td>'));
@@ -236,11 +223,6 @@ var albumsManager = {};
         });
 
         $('tbody').append($newRow);
-
-        function getNumberCell() {
-            var lastNumber = parseInt($('tbody').children('tr').last().children('td').first().text());
-            return (isNaN(lastNumber)) ? 1 : lastNumber + 1;
-        }
 
         function getDescription(description) {
             var $description = $('<td class="description"></td>');
@@ -321,4 +303,3 @@ var albumsManager = {};
         $("#edit-form")[0].reset();
     };
 })(albumsManager);
-
