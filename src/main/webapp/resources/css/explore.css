@@ -1,0 +1,21 @@
+/*!
+ * Style used on explore page.
+ */
+
+div.picrow {
+    border: 0 solid #000;
+}
+
+div#picstest {
+    height: 0;
+    width: 100%;
+}
+
+div#loading {
+    display: none;
+    text-align: center;
+}
+
+img.photo {
+    cursor: pointer;
+}

@@ -158,8 +158,10 @@ var justifiedLayout = {}, picsArray;
                     {
                         "class": "photo",
                         src: purl,
-                        width: wt,
-                        height: newHeight
+                        css: {
+                            width: wt,
+                            height: newHeight
+                        }
                     }).css("margin", border + "px");
 
                 img.click(clickHandler(thumb));
