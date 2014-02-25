@@ -7,35 +7,54 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Sign in</title>
-    <link rel="stylesheet" type="text/css" href="<spring:url value="/resources/css/bootstrap.css" />"/>
-    <link rel="stylesheet" type="text/css" href="<spring:url value="/resources/css/signin-signup.css" />"/>
-    <link rel="stylesheet" type="text/css" href="<spring:url value="/resources/css/validate.css" />"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="<c:url value="/resources/ico/favicon.ico"/>">
+
+    <title>Home</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="<c:url value="/resources/css/bootstrap.css"/>" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    <link href="<c:url value="/resources/css/sign.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/validate.css"/>" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-    <form id="login" class="form-signin" action="<spring:url value="/j_spring_security_check" />" method="post">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <c:if test="${ param.failure == true }">
-            <p class="error">
-                    ${loginFailure}
-            </p>
-        </c:if>
-        <label for="email">Email</label>
-        <input id="email" type="email" class="input-block-level" placeholder="Email address" name="j_username"
-               required="true">
-        <label for="password">Password</label>
-        <input id="password" type="password" class="input-block-level" placeholder="Password" name="j_password"
-               required="true">
-        <button class="btn btn-large btn-primary" type="submit" onclick="">Sign in</button>
+    <c:if test="${loginFailure != null}">
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <strong>Error!</strong> ${loginFailure}
+        </div>
+    </c:if>
+    <h3 class="form-signin-heading text-center">Please sign in to pretty good gallery</h3>
+
+    <form class="form-signin" role="form" method="post" action="<c:url value="/j_spring_security_check"/>">
+        <input type="email" id="email" class="form-control" placeholder="Email address" name="j_username" required
+               autofocus>
+        <input type="password" id="password" class="form-control" placeholder="Password" name="j_password" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
     </form>
     <div class="form-signin">
-        <h3>Not have account yet?</h3>
-        <a href="<spring:url value="/register" />" class="btn btn-large btn-success">Sign up</a>
+        <h3 class="text-center">No account yet</h3>
+        <a class="btn btn-lg btn-success btn-block" type="submit">Sign up</a>
     </div>
 </div>
-<script src="<spring:url value="/resources/js/jquery-2.0.0.js" />"></script>
-<script src="<spring:url value="/resources/js/jquery.validate.js" />"></script>
-<script src="<spring:url value="/resources/js/login.validate.js" />"></script>
+<!-- /container -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="<c:url value="/resources/js/jquery-2.0.0.js" />"></script>
+<script src="<c:url value="/resources/js/jquery.validate.js" />"></script>
 </body>
 </html>
