@@ -31,32 +31,42 @@ public class AlbumController {
         binder.setValidator(new AlbumValidator());
     }
 
-    @RequestMapping(value = "/albums/create", method = RequestMethod.GET)
-    public String viewCreateAlbumPage(Model model) {
-        model.addAttribute("album", new Album());
-        return "createAlbum";
-    }
-
     @RequestMapping(value = "/albums", method = RequestMethod.GET, produces = "application/json")
     public
     @ResponseBody
     List<Album> listAlbums(Principal principal) {
-        log.debug("List albums in JSON");
+        log.debug("Album list in JSON");
         String userEmail = principal.getName();
         return albumDao.retrieveUserAlbums(userEmail);
     }
 
     @RequestMapping(value = "/albums", method = RequestMethod.GET)
     public String showUserAlbums(Model model, Principal principal) {
-        List<Album> albums = albumDao.retrieveUserAlbums(principal.getName());
+
+        String userOwner = principal.getName();
+        List<Album> albums = albumDao.retrieveUserAlbums(userOwner);
+
         model.addAttribute("albums", albums);
-        return "showAlbumList";
+        model.addAttribute("userOwner", userOwner);
+        return "showUserAlbumList";
+    }
+
+    @RequestMapping(value = "/albums/manage", method = RequestMethod.GET)
+    public String manageUserAlbums(Model model, Principal principal) {
+
+        String userOwner = principal.getName();
+        List<Album> albums = albumDao.retrieveUserAlbums(userOwner);
+
+        model.addAttribute("albums", albums);
+        model.addAttribute("userOwner", userOwner);
+
+        return "manageAlbumList";
     }
 
     @RequestMapping(value = "/albums/{id}")
     private String displayAlbum(@PathVariable int id, Model model) {
         model.addAttribute(albumDao.retrieveAlbum(id));
-        return "showAlbum";
+        return "showAlbumPictures";
     }
 
     @RequestMapping(value = "/albums/{id}", method = RequestMethod.GET, produces = "application/json")
