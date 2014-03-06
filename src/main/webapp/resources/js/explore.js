@@ -66,9 +66,7 @@ var justifiedLayout = {}, picsArray;
 
     var clickHandler = function (photo) {
         return function () {
-            //                var url = "http://www.flickr.com/photos/" + photo.owner + "/" + photo.id;
-            var url = "#";
-            location.href = url;
+            location.href = "/albums/" + photo.albumHolderId + "/images/" + photo.id + "/" + photo.fileName;
         };
     };
 
@@ -77,12 +75,11 @@ var justifiedLayout = {}, picsArray;
         lastWidth = $("div#picstest").innerWidth();
         lastWidth = Math.max(lastWidth, minWidth);
         baseLine = 0;
-        //            processPhotos(photoArray);
-        processImages(photoArray);
+        processPicture(photoArray);
         $("div.picrow").width(lastWidth);
     };
 
-    var processImages = function (thumbList) {
+    var processPicture = function (thumbList) {
         if (!thumbList) return;
 
         var d = $("div#pics");
@@ -149,9 +146,6 @@ var justifiedLayout = {}, picsArray;
                 // Create image, set src, width, height and margin
                 //                    var purl = listItem.url_n;
                 var purl = thumbUrlTemplate + "/" + thumb.albumHolderId + "/images/" + thumb.id + '/' + thumb.fileName;
-                //                    if( wt > listItem.width_n * 1.2 || newHeight > listItem.height_n * 1.2 ) purl = listItem.url_m;
-                //                    if( wt > photo.width_m * 1.2 || ht > photo.height_m * 1.2 ) purl = photo.url_z;
-                //                    if( wt > photo.width_z * 1.2 || ht > photo.height_z * 1.2 ) purl = photo.url_l;
 
                 var img = $(
                     '<img/>',
@@ -161,6 +155,11 @@ var justifiedLayout = {}, picsArray;
                         css: {
                             width: wt,
                             height: newHeight
+                        },
+                        on: {
+                            load: function (e) {
+                                $(e.target).css("opacity", 1);
+                            }
                         }
                     }).css("margin", border + "px");
 
@@ -196,122 +195,6 @@ var justifiedLayout = {}, picsArray;
         }
     };
 
-    var processPhotos = function (photos) {
-        if (!photos) return;
-
-        // divs to contain the images
-        var d = $("div#pics");
-        if (baseLine === 0) {
-            d.empty();
-        }
-
-        // get row width - this is fixed.
-        var w = lastWidth;
-
-        // initial height - effectively the maximum height +/- 10%;
-        var h = Math.max(minHeight, Math.floor(w / 5));
-        // margin width
-        var border = 5;
-
-        // store relative widths of all images (scaled to match estimate height above)
-        var ws = [];
-        $.each(photos, function (key, val) {
-            var wt = parseInt(val.width_n, 10);
-            var ht = parseInt(val.height_n, 10);
-            if (ht != h) {
-                wt = Math.floor(wt * (h / ht));
-            }
-            ws.push(wt);
-        });
-
-        var rowNum = 0;
-        var limit = Math.min(maxPhotos, photos.length);
-
-        while (baseLine < limit) {
-            rowNum++;
-            // number of images appearing in this row
-            var c = 0;
-            // total width of images in this row - including margins
-            var tw = 0;
-
-            // calculate width of images and number of images to view in this row.
-            while ((tw * 1.1 < w) && (baseLine + c < limit)) {
-                tw += ws[baseLine + c++] + border * 2;
-            }
-
-            // skip the last row
-            if (baseLine + c >= limit) return;
-
-            var d_row = $("<div/>", {"class": "picrow"});
-            d.append(d_row);
-
-
-            // Ratio of actual width of row to total width of images to be used.
-            var r = w / tw;
-
-            // image number being processed
-            var i = 0;
-            // reset total width to be total width of processed images
-            tw = 0;
-            // new height is not original height * ratio
-            var ht = Math.floor(h * r);
-            d_row.height(ht + border * 2);
-
-            while (i < c) {
-                var photo = photos[baseLine + i];
-                // Calculate new width based on ratio
-                var wt = Math.floor(ws[baseLine + i] * r);
-                // add to total width with margins
-                tw += wt + border * 2;
-
-                // Create image, set src, width, height and margin
-                var purl = photo.url_n;
-                if (wt > photo.width_n * 1.2 || ht > photo.height_n * 1.2) purl = photo.url_m;
-                //                    if( wt > photo.width_m * 1.2 || ht > photo.height_m * 1.2 ) purl = photo.url_z;
-                //                    if( wt > photo.width_z * 1.2 || ht > photo.height_z * 1.2 ) purl = photo.url_l;
-
-                var img = $(
-                    '<img/>',
-                    {
-                        "class": "photo",
-                        src: purl,
-                        width: wt,
-                        height: ht
-                    }).css("margin", border + "px");
-
-                img.click(clickHandler(photo));
-                d_row.append(img);
-
-                i++;
-            }
-
-            // set row height to actual height + margins
-            baseLine += c;
-
-            // if total width is slightly smaller than
-            // actual div width then add 1 to each
-            // photo width till they match
-            i = 0;
-            while (tw < w) {
-                var img1 = d_row.find("img:nth-child(" + (i + 1) + ")");
-                img1.width(img1.width() + 1);
-                i = (i + 1) % c;
-                tw++;
-            }
-            // if total width is slightly bigger than
-            // actual div width then subtract 1 from each
-            // photo width till they match
-            i = 0;
-            while (tw > w) {
-                var img2 = d_row.find("img:nth-child(" + (i + 1) + ")");
-                img2.width(img2.width() - 1);
-                i = (i + 1) % c;
-                tw--;
-            }
-
-        }
-    };
-
     // levelReached function taken from infiniteScroll jquery plugin
     // https://github.com/holtonma/infini_scroll
 
@@ -332,7 +215,7 @@ var justifiedLayout = {}, picsArray;
     var pollLevel = function () {
         if (photoArray && levelReached()) {
             maxPhotos = Math.min(maxPhotos + 30, 150);
-            processPhotos(photoArray);
+            processPicture(photoArray);
         }
         setTimeout(pollLevel, 100);
     };

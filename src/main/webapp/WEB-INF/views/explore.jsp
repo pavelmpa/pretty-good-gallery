@@ -22,8 +22,6 @@
 
     <!-- Custom styles for this template -->
     <link href="<c:url value="/resources/css/template.css"/>" rel="stylesheet">
-    <link href="<c:url value="/resources/css/jquery.fancybox.css"/>" rel="stylesheet"/>
-    <link href="<c:url value="/resources/css/jquery.fancybox.fix.css"/>" rel="stylesheet"/>
     <link href="<c:url value="/resources/css/alert-box.css"/>" rel="stylesheet">
     <link href="<c:url value="/resources/css/explore.css"/>" rel="stylesheet">
 </head>
@@ -55,7 +53,6 @@
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
 <script src="<c:url value="/resources/js/template.js"/>"></script>
-<script src="<c:url value="/resources/js/jquery.fancybox.js" />"></script>
 <script src="<c:url value="/resources/js/alert-box.js"/>"></script>
 <script src="<c:url value="/resources/js/explore.js"/>"></script>
 </body>
