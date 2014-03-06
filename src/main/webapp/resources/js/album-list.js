@@ -132,7 +132,6 @@ var albumLayout = {};
                 }
             } else {
                 covers.push({
-//                    coverUrl: "http://www.placehold.it/300x200&text=No pics yet",
                     coverUrl: "http://www.placehold.it/300x200/3c3c3c/ffffff&text=No%20pics%20yet",
                     coverWidth: 300,
                     coverHeight: 200

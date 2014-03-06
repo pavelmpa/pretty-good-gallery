@@ -162,7 +162,7 @@
 <script src="<c:url value="/resources/js/jquery.validate.js"/>"></script>
 <script src="<c:url value="/resources/js/template.js"/>"></script>
 <script src="<c:url value="/resources/js/alert-box.js"/>"></script>
-<script src="<c:url value="/resources/js/album.new.js"/>"></script>
+<script src="<c:url value="/resources/js/album-manage-list.js"/>"></script>
 <%--Todo: fix create new album validation--%>
 </body>
 </html>

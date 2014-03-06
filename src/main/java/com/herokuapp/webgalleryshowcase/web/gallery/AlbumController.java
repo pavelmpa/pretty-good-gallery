@@ -78,7 +78,7 @@ public class AlbumController {
 
     @RequestMapping(value = "/albums/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteAlbum(@PathVariable int id) {
-        log.debug("Delete.");
+        log.debug("Delete album. ID: " + id);
         ResponseEntity<String> response;
 
         if (albumDao.deleteAlbum(id)) {
