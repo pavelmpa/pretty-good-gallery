@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
@@ -32,9 +33,7 @@ public class ImageItemDaoJdbcTemplate implements ImageItemDao {
     private static final String RETRIEVE_IMAGE = "SELECT * FROM image_items " +
             "WHERE id = :imageItemId AND album_holder_id = :albumId";
 
-    private static final String RETRIEVE_IMAGE_INFO =
-            "SELECT id, file_name, content_type, upload_timestamp, title, album_holder_id " +
-                    "FROM image_items WHERE id = :imageId AND album_holder_id = :albumId";
+    private static final String DELETE_IMAGE = "DELETE FROM image_items WHERE id = :imageId";
 
     private static final String RETRIEVE_THUMBNAILS_lIST =
             "SELECT id, file_name, upload_timestamp, title, content_type, width, height, album_holder_id FROM image_items " +
@@ -73,6 +72,12 @@ public class ImageItemDaoJdbcTemplate implements ImageItemDao {
             throw new ImageNotFoundException(ex);
         }
         return imageItem;
+    }
+
+    @Override
+    public boolean deleteImage(int imageId) {
+        SqlParameterSource parameterSource = new MapSqlParameterSource("imageId", imageId);
+        return jdbcTemplate.update(DELETE_IMAGE, parameterSource) > 0;
     }
 
     @Override

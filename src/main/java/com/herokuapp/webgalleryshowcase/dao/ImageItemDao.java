@@ -10,6 +10,8 @@ public interface ImageItemDao {
 
     ImageItem retrieveImage(int albumId, int imageItemId);
 
+    boolean deleteImage(int imageId);
+
     List<ImageItem> retrieveThumbnailListByAlbum(int albumId, int fromItem, int amount);
 
     List<ImageItem> retrieveExploreThumbnailList(int fromItem, int amount);

@@ -78,10 +78,16 @@ public class ImageController {
     }
 
     @RequestMapping(value = "/images/{imageId}", method = RequestMethod.DELETE)
-    public ResponseEntity<Object> deleteImage(@PathVariable("imageId") Integer imageId) {
+    public ResponseEntity<String> deleteImage(@PathVariable("imageId") Integer imageId) {
         log.debug("Delete image " + imageId);
-        Object response = "Image " + imageId + "has been deleted successfully.";
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        ResponseEntity<String> response;
+
+        if (imageItemDao.deleteImage(imageId)) {
+            response = new ResponseEntity<>("Image has been deleted successfully.", HttpStatus.OK);
+        } else {
+            response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return response;
     }
 
     private boolean isContentTypeValid(String fileContentType) {
