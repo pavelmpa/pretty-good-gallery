@@ -18,4 +18,5 @@ div#loading {
 
 img.photo {
     cursor: pointer;
+    opacity: 0;
 }
