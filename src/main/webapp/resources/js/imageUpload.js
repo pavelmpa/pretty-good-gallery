@@ -13,6 +13,8 @@ $(document).ready(function () {
     $('#upload').on("click", function () {
         imageUploader.uploadImage();
     });
+
+    $('[data-toggle=tooltip]').tooltip();
 });
 
 $(document).ajaxStart(function () {

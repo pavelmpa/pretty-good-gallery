@@ -43,8 +43,13 @@
     <!-- CONTENT
     ================================================== -->
     <div class="container text-center" style="padding-top: 10px">
+        <div class="row text-left">
+            <a class="btn btn-default" href="<c:url value="/albums/${albumId}"/>" data-toggle="tooltip"
+               data-placement="bottom" title="Back to album">
+                <span class="glyphicon glyphicon-arrow-left"></span>
+            </a>
+        </div>
         <h2>Upload new picture</h2>
-
         <form>
             <div class="fileinput fileinput-new" data-provides="fileinput">
                 <div class="fileinput-new thumbnail" style="min-width: 480px; min-height: 320px;">

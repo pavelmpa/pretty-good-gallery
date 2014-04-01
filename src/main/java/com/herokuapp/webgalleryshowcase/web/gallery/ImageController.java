@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +30,8 @@ public class ImageController {
     private ImageService imageService;
 
     @RequestMapping("/upload")
-    public String displayUploadImage() {
+    public String displayUploadImage(Model model, @PathVariable int albumId) {
+        model.addAttribute("albumId", albumId);
         return "uploadImage";
     }
 
