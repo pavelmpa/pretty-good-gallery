@@ -4,6 +4,8 @@
  */
 
 $(document).ready(function () {
+    squareThumbLayout.loadNewThumbnails();
+
     var editable = false;
 
     $('#manage-pics').on('click', function () {
@@ -30,8 +32,6 @@ $(document).ready(function () {
         $deletePicDialog.modal('hide');
         squareThumbLayout.removePicture($deletePicDialog.data("photo-id"));
     });
-
-    squareThumbLayout.loadNewThumbnails();
 });
 
 $(window).scroll(function () {
@@ -51,14 +51,27 @@ var squareThumbLayout = {};
 
     var availableLoadItems = 30, currentAmount = 0;
 
-    var loadThumbnailsUrl = document.URL + "/images/";
+    var loadThumbnailsUrl = document.URL + "/images";
 
     context.loadNewThumbnails = function () {
-        $.getJSON(loadThumbnailsUrl, { fromItem: currentAmount, amount: availableLoadItems }).done(
-            showImages
-        ).fail(function () {
+        $.ajax({
+            url: loadThumbnailsUrl,
+            cache: false,
+            type: "GET",
+            data: {
+                format: 'json',
+                fromItem: currentAmount,
+                amount: availableLoadItems
+            },
+            headers: {
+                "Accept": "application/json"
+            },
+            timeout: 10000,
+            success: showImages,
+            error: function () {
                 alertBox.alertError("Something goes wrong.");
-            });
+            }
+        });
     };
 
     function showImages(json) {
@@ -78,7 +91,7 @@ var squareThumbLayout = {};
 
     var getThumbElement = function (image) {
         var imgId = image.id, title = image.title;
-        var thumbUrl = loadThumbnailsUrl + imgId + '/' + image.fileName;
+        var thumbUrl = loadThumbnailsUrl + '/' + imgId + '/' + image.fileName;
 
         if (!title) {
             title = "";
@@ -104,17 +117,17 @@ var squareThumbLayout = {};
     var thumbRatio = thumbWidth / thumbHeight;
 
     function calculateImageSize(width, height) {
-        var imgRatio = width / height;
+        var originalRatio = width / height;
 
         var calculatedStyle;
 
-        if (imgRatio > thumbRatio) {
+        if (originalRatio > thumbRatio) {
             calculatedStyle = "height: 100%; ";
-            var marginLeft = (thumbHeight * imgRatio - thumbHeight * thumbRatio) / 2;
-            calculatedStyle = calculatedStyle + "margin-left: " + -marginLeft + "px;";
+            var marginLeft = (thumbWidth - thumbHeight * originalRatio) / 2;
+            calculatedStyle = calculatedStyle + "margin-left: " + marginLeft + "px;";
         } else {
             calculatedStyle = "width: 100%; ";
-            var marginTop = (thumbWidth * imgRatio - thumbWidth * thumbRatio) / 2;
+            var marginTop = (thumbHeight - thumbWidth / originalRatio) / 2;
             calculatedStyle = calculatedStyle + "margin-top: " + marginTop + "px;";
         }
 

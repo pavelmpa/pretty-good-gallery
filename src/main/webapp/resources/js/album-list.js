@@ -150,8 +150,6 @@ var albumLayout = {};
         });
 
         var createAlbumItem = function (albumId, albumUrl, albumTitle, covers) {
-            var loop = null, images = $();
-
             var $albumsWrap = $('#album-holder');
 
             var $albumItem = $('<div/>', { id: albumId, 'class': "album-item"});
@@ -181,6 +179,9 @@ var albumLayout = {};
 
             $albumsWrap.append($albumItem);
 
+
+            var loop = null, images = $();
+
             var animationTrigger = function () {
                 if ($album.data("covers")) return;
 
@@ -195,11 +196,11 @@ var albumLayout = {};
                         });
 
                         $cover.after(images);
-
-                        images.first().load(function () {
-                            startAnimation();
-                        });
                     }
+
+                    images.first().load(function () {
+                        startAnimation();
+                    });
                 } else {
                     startAnimation();
                 }
@@ -234,7 +235,6 @@ var albumLayout = {};
             };
 
             var stopAnimation = function () {
-
                 $album.removeClass('loading');
                 clearTimeout(loop);
             };
@@ -242,8 +242,21 @@ var albumLayout = {};
     };
 
     context.loadAlbumList = function () {
-        $.getJSON(url, { format: 'json' }, processAlbumListJson).fail(function () {
-            alertBox.alertError("Fail.");
+        $.ajax({
+            url: url,
+            cache: false,
+            type: "GET",
+            data: {
+                format: 'json'
+            },
+            headers: {
+                "Accept": "application/json"
+            },
+            timeout: 10000,
+            success: processAlbumListJson,
+            error: function () {
+                alertBox.alertError("Failed to load albums.");
+            }
         });
     };
 
@@ -255,12 +268,12 @@ var albumLayout = {};
         if (originalRatio >= thumbRatio) {
             return {
                 height: "100%",
-                'margin-left': (thumbWidth - originalRatio * thumbHeight) / 2
+                'margin-left': (thumbWidth - thumbHeight * originalRatio) / 2
             };
         } else {
             return {
                 width: "100%",
-                'margin-top': (thumbHeight - thumbWidth * originalRatio) / 2
+                'margin-top': (thumbHeight - thumbWidth / originalRatio) / 2
             };
         }
     };

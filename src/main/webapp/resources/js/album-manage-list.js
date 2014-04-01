@@ -157,7 +157,7 @@ var albumsManager = {};
         var message = response.message;
         var album = response.album;
 
-        if (xhr.status == 201) {
+        if (xhr.status == 200) {
             updateAlbumInTable(album);
             alertBox.alertSuccess(message);
         } else if (xhr.status == 204) {
@@ -302,4 +302,23 @@ var albumsManager = {};
 
         $("#edit-form")[0].reset();
     };
+
+    function updateAlbumInTable(albumJson) {
+        var $album = $('#' + albumJson.id);
+
+        $album.children('.title').find('a').text(albumJson.title);
+        setDescription(albumJson.description);
+
+        function setDescription(description) {
+            var $description = $album.children('.description');
+
+            if ($.isEmptyObject(description)) {
+                $description.addClass('no-description');
+                $description.text("\u2014");
+            } else {
+                $description.removeClass('no-description');
+                $description.text(description);
+            }
+        }
+    }
 })(albumsManager);
