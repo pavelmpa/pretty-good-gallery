@@ -9,16 +9,11 @@ $(document).ready(function () {
 
     $("#update").click(justifiedLayout.loadData);
 
-    $("#tags").keyup(function (event) {
-        if (event.keyCode == 13) {
-            $("#update").click();
-        }
-    });
+    $('.fancybox').fancybox();
 });
 
 // Namespace justifiedLayout, using Dynamic namespaces pattern
-// http://javascriptweblog.wordpress.com/2010/12/07/namespacing-in-javascript/
-var justifiedLayout = {}, picsArray;
+var justifiedLayout = {};
 
 (function (context) {
 
@@ -50,24 +45,15 @@ var justifiedLayout = {}, picsArray;
         $("div#pics").empty();
         $("#loading").show();
 
-        var tags = $("#tags").val();
-        var sort = $("#sort").val();
-
         photoArray = $('#thumbnails').find('img');
         updateRows();
-        $.getJSON("/explore.json", { fromItem: 0 },
-            function (data, status) {
+        $.getJSON("/explore.json", { fromItem: 0, amount: maxPhotos },
+            function (data) {
                 photoArray = data;
                 updateRows();
                 $("#loading").hide();
             }
         );
-    };
-
-    var clickHandler = function (photo) {
-        return function () {
-            location.href = "/albums/" + photo.albumHolderId + "/images/" + photo.id + "/" + photo.fileName;
-        };
     };
 
     // only call this when either the data is loaded, or the windows resizes by a chunk
@@ -144,13 +130,23 @@ var justifiedLayout = {}, picsArray;
                 totalWidth += wt + border * 2;
 
                 // Create image, set src, width, height and margin
-                //                    var purl = listItem.url_n;
                 var purl = thumbUrlTemplate + "/" + thumb.albumHolderId + "/images/" + thumb.id + '/' + thumb.fileName;
 
+                var link = $(
+                    '<a></a>', {
+                        class: "fancybox",
+                        href: purl,
+                        rel: "gallery",
+                        css: {
+                            width: wt,
+                            height: newHeight
+                        }
+                    }
+                ).css("margin", border + "px");
+
                 var img = $(
-                    '<img/>',
-                    {
-                        "class": "photo",
+                    '<img/>', {
+                        class: "photo",
                         src: purl,
                         css: {
                             width: wt,
@@ -161,10 +157,11 @@ var justifiedLayout = {}, picsArray;
                                 $(e.target).css("opacity", 1);
                             }
                         }
-                    }).css("margin", border + "px");
+                    }
+                );
 
-                img.click(clickHandler(thumb));
-                d_row.append(img);
+                link.append(img);
+                d_row.append(link);
 
                 imageNumber++;
             }
@@ -177,7 +174,7 @@ var justifiedLayout = {}, picsArray;
             // photo width till they match
             imageNumber = 0;
             while (totalWidth < w) {
-                var img1 = d_row.find("img:nth-child(" + (imageNumber + 1) + ")");
+                var img1 = d_row.find("a:nth-child(" + (imageNumber + 1) + ")");
                 img1.width(img1.width() + 1);
                 imageNumber = (imageNumber + 1) % numberOfImagesInRow;
                 totalWidth++;
@@ -187,7 +184,7 @@ var justifiedLayout = {}, picsArray;
             // photo width till they match
             imageNumber = 0;
             while (totalWidth > w) {
-                var img2 = d_row.find("img:nth-child(" + (imageNumber + 1) + ")");
+                var img2 = d_row.find("a:nth-child(" + (imageNumber + 1) + ")");
                 img2.width(img2.width() - 1);
                 imageNumber = (imageNumber + 1) % numberOfImagesInRow;
                 totalWidth--;

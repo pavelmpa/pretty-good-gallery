@@ -29,9 +29,9 @@ public class ExploreController {
     }
 
     @RequestMapping(value = "/explore.json", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<ImageItem>> explore(@RequestParam("fromItem") int fromItem) {
+    public ResponseEntity<List<ImageItem>> explore(@RequestParam int fromItem, @RequestParam int amount) {
         log.debug("explore json");
-        List<ImageItem> thumbList = imageItemDao.retrieveExploreThumbnailList(fromItem, 30);
+        List<ImageItem> thumbList = imageItemDao.retrieveExploreThumbnailList(fromItem, amount);
         return new ResponseEntity<>(thumbList, HttpStatus.OK);
     }
 }
