@@ -20,22 +20,27 @@ import java.util.Map;
 @Repository
 public class AlbumDaoJdbcTemplate implements AlbumDao {
 
-    private final static String ADD_ALBUM = "INSERT INTO albums (title, description, owner_user_id) " +
-            "VALUES (:title, :description, (SELECT id FROM users WHERE email = :userOwner)) RETURNING (album_id)";
 
-    private final static String UPDATE_ALBUM = "UPDATE albums SET  title = :title, description = :description WHERE album_id = :id RETURNING (album_id)";
+    private final static String CREATE_ALBUM =
+            "INSERT INTO web_gallery.albums (title, description, owner_user_id) " +
+                    "VALUES (:title, :description, (SELECT web_gallery.users.id FROM web_gallery.users WHERE email = :userOwner)) " +
+                    "RETURNING (web_gallery.albums.id)";
 
-    private final static String DELETE_ALBUM = "DELETE FROM albums WHERE album_id = :albumId";
+    private final static String UPDATE_ALBUM = "UPDATE web_gallery.albums SET  title = :title, description = :description WHERE id = :id RETURNING (id)";
+
+    private final static String DELETE_ALBUM = "DELETE FROM web_gallery.albums WHERE id = :albumId";
 
     private final static String RETRIEVE_ALBUM =
-            "SELECT album_id, title, description, public_access, created_time, last_modified, email AS user_owner, " +
-                    "(SELECT COUNT(*) FROM image_items WHERE image_items.album_holder_id=albums.album_id) AS images_number " +
-                    "FROM albums INNER JOIN users ON owner_user_id = users.id WHERE album_id = :albumId";
+            "SELECT web_gallery.albums.id, title, description, public_access, created_time, last_modified, email AS user_owner, " +
+                    "(SELECT COUNT(*) FROM web_gallery.image_items " +
+                    "WHERE web_gallery.image_items.album_holder_id = web_gallery.albums.id) AS images_number " +
+                    "FROM web_gallery.albums INNER JOIN web_gallery.users ON owner_user_id = web_gallery.users.id WHERE web_gallery.albums.id = :albumId";
 
     private final static String RETRIEVE_ALL_USER_ALBUMS_BY_EMIL =
-            "SELECT album_id, title, description, public_access, created_time, last_modified, email AS user_owner, " +
-                    "(SELECT COUNT(*) FROM image_items WHERE image_items.album_holder_id=albums.album_id) AS images_number " +
-                    "FROM albums INNER JOIN users ON owner_user_id = users.id where email = :email";
+            "SELECT web_gallery.albums.id, title, description, public_access, created_time, last_modified, email AS user_owner, " +
+                    "(SELECT COUNT(*) FROM web_gallery.image_items " +
+                    "WHERE web_gallery.image_items.album_holder_id = web_gallery.albums.id) AS images_number " +
+                    "FROM web_gallery.albums INNER JOIN web_gallery.users ON owner_user_id = web_gallery.users.id where email = :email";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -47,7 +52,7 @@ public class AlbumDaoJdbcTemplate implements AlbumDao {
     @Override
     public Album createAlbum(Album album) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(album);
-        int newAlbumId = jdbcTemplate.queryForObject(ADD_ALBUM, params, Integer.class);
+        int newAlbumId = jdbcTemplate.queryForObject(CREATE_ALBUM, params, Integer.class);
 
         return this.retrieveAlbum(newAlbumId);
     }
@@ -83,7 +88,7 @@ public class AlbumDaoJdbcTemplate implements AlbumDao {
         public Album mapRow(ResultSet resultSet, int i) throws SQLException {
             Album album = new Album();
 
-            album.setId(resultSet.getInt("album_id"));
+            album.setId(resultSet.getInt("id"));
             album.setTitle(resultSet.getString("title"));
             album.setDescription(resultSet.getString("description"));
             album.setUserOwner(resultSet.getString("user_owner"));

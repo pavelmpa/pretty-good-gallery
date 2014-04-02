@@ -36,7 +36,7 @@ public class ImageServiceImpl implements ImageService {
             throw new FileUploadException("File upload problem", e);
         }
 
-        String fileName = replaceSpacesWithUnderscore(file.getContentType());
+        String fileName = replaceSpacesWithUnderscore(file.getOriginalFilename());
         ImageItem imageItem = new ImageItem();
 
         imageItem.setFileName(fileName);

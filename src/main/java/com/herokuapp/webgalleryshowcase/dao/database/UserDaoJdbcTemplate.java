@@ -26,12 +26,13 @@ public class UserDaoJdbcTemplate implements UserDao {
 
     private final Logger log = LoggerFactory.getLogger(UserDaoJdbcTemplate.class);
 
-    private static final String ADD_USER = "INSERT INTO users (first_name, last_name, username, email, password) " +
+    private static final String ADD_USER = "INSERT INTO web_gallery.users (first_name, last_name, username, email, password) " +
             "VALUES (:firstName, :lastName, :username, :email, :password)";
 
     private static final String GET_USER_BY_EMAIL =
-            "SELECT users.id, first_name, last_name, email, username, password, enabled, join_timestamp, authority " +
-                    "FROM users INNER JOIN user_authorities ON users.authorities = user_authorities.id " +
+            "SELECT web_gallery.users.id, first_name, last_name, email, username, password, enabled, join_timestamp, authority " +
+                    "FROM web_gallery.users " +
+                    "INNER JOIN web_gallery.user_authorities ON web_gallery.users.authorities = web_gallery.user_authorities.id " +
                     "WHERE email = :email";
 
     private NamedParameterJdbcTemplate jdbcTemplate;

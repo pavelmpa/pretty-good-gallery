@@ -57,6 +57,10 @@ public class AlbumController {
         String userOwner = principal.getName();
         List<Album> albums = albumDao.retrieveUserAlbums(userOwner);
 
+        log.debug("Albums: " + albums.size());
+        log.debug("First album: " + albums.get(0).getId());
+        log.debug("First album: " + albums.get(0).getTitle());
+
         model.addAttribute("albums", albums);
         model.addAttribute("userOwner", userOwner);
 
@@ -65,6 +69,7 @@ public class AlbumController {
 
     @RequestMapping(value = "/albums/{id}")
     private String displayAlbum(@PathVariable int id, Model model) {
+        log.debug("Retrieve album. ID: " + id);
         model.addAttribute(albumDao.retrieveAlbum(id));
         return "showAlbumPictures";
     }

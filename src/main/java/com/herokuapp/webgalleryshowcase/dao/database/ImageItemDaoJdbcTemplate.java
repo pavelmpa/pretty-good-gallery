@@ -26,22 +26,22 @@ public class ImageItemDaoJdbcTemplate implements ImageItemDao {
 
     private Logger log = LoggerFactory.getLogger(ImageItemDaoJdbcTemplate.class);
 
-    private static final String UPLOAD_IMAGE = "INSERT INTO image_items " +
+    private static final String UPLOAD_IMAGE = "INSERT INTO web_gallery.image_items " +
             "(file_name, content_type, title, file_content, album_holder_id, width, height)" +
             " VALUES (:fileName, :contentType, :title, :fileContent, :albumHolderId, :width, :height)";
 
-    private static final String RETRIEVE_IMAGE = "SELECT * FROM image_items " +
+    private static final String RETRIEVE_IMAGE = "SELECT * FROM web_gallery.image_items " +
             "WHERE id = :imageItemId AND album_holder_id = :albumId";
 
-    private static final String DELETE_IMAGE = "DELETE FROM image_items WHERE id = :imageId";
+    private static final String DELETE_IMAGE = "DELETE FROM web_gallery.image_items WHERE id = :imageId";
 
     private static final String RETRIEVE_THUMBNAILS_lIST =
-            "SELECT id, file_name, upload_timestamp, title, content_type, width, height, album_holder_id FROM image_items " +
+            "SELECT id, file_name, upload_timestamp, title, content_type, width, height, album_holder_id FROM web_gallery.image_items " +
                     "WHERE album_holder_id = :albumId ORDER BY id LIMIT :amount OFFSET :fromItem";
 
     private static final String RETRIEVE_EXPLORE_THUMBNAILS_lIST =
             "SELECT id, file_name, upload_timestamp, title, content_type, width, height, album_holder_id " +
-                    "FROM image_items ORDER BY id LIMIT :amount OFFSET :fromItem";
+                    "FROM web_gallery.image_items ORDER BY id LIMIT :amount OFFSET :fromItem";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
