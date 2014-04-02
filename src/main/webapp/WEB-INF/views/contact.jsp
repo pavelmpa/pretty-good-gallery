@@ -35,10 +35,8 @@
     <!-- CONTENT
     ================================================== -->
     <div class="container" style="padding-top: 10px">
-        <h3>Author Pavel Miroshnichenko</h3>
         <h4>
-            You can contact me with e-mail: <a
-                href="mailto:paul.miroshnichenko@gmail.com">paul.miroshnichenko@gmail.com</a>
+            You can contact author with e-mail: <a href="mailto:paul.miroshnichenko@gmail.com">paul.miroshnichenko@gmail.com</a>
         </h4>
     </div>
 </div>

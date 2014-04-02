@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,12 +41,12 @@
                 <div class="col-xs-6 col-md-2">
                     <a class="btn btn-primary btn-upload-image"
                        href="${requestScope['javax.servlet.forward.request_uri']}/upload">
-                    Upload new picture
+                        Upload new picture
                     </a>
                 </div>
                 <div id="album-title" class="col-xs-12 col-md-8">
                     <div class="panel panel-default text-left">
-                    <div class="panel-heading">
+                        <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                                     ${album.title}

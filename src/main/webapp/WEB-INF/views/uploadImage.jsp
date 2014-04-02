@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -50,6 +51,7 @@
             </a>
         </div>
         <h2>Upload new picture</h2>
+
         <form>
             <div class="fileinput fileinput-new" data-provides="fileinput">
                 <div class="fileinput-new thumbnail" style="min-width: 480px; min-height: 320px;">
@@ -83,8 +85,8 @@
 <jsp:include page="templates/footer.jsp"/>
 <ul class="alert-box"></ul>
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-<script src="<c:url value="/resources/js/bootstrap.js"/>"></script>
-<script src="<c:url value="/resources/js/bootstrap-fileupload.js"/>"></script>
+<script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+<script src="<c:url value="/resources/js/bootstrap-fileupload.min.js"/>"></script>
 <script src="<c:url value="/resources/js/alert-box.js"/>"></script>
 <script src="<c:url value="/resources/js/imageUpload.js"/>"></script>
 </body>

@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +39,7 @@
             <div class="col-xs-6 col-md-4 text-left">
                 <div class="btn-group">
                     <a class="btn btn-default" href="<c:url value="/albums"/>">
-                    <span class="glyphicon glyphicon-th"></span>
+                        <span class="glyphicon glyphicon-th"></span>
                     </a>
                     <a class="btn btn-default active" href="#">
                         <span class="glyphicon glyphicon-th-list"></span>

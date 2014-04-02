@@ -37,7 +37,7 @@ $(document).ready(function () {
         },
         messages: {
             confirmPassword: {
-                equalTo: "Passwords don't match."
+                equalTo: "Passwords doesn't match."
             }
         }
     });

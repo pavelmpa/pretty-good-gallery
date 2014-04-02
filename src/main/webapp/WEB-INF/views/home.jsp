@@ -1,6 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -41,14 +39,14 @@
 
                 <p class="lead">Not have gallery yet. Get your own gallery now. Just sign up.</p>
 
-                <p><a class="btn btn-lg btn-success" href="<spring:url value="/register" />" role="button">Sign up</a>
+                <p><a class="btn btn-lg btn-success" href="<c:url value="/register" />" role="button">Sign up</a>
                 </p>
             </div>
         </security:authorize>
         <security:authorize access="isAuthenticated()">
             <p class="lead">
-                Here will be something soon. But now you can visit <a href="<spring:url value="/albums" />">you
-                albums</a> page.
+                Here will be something soon. But now you can visit
+                <a href="<c:url value="/albums" />">you albums</a> page.
             </p>
         </security:authorize>
     </div>

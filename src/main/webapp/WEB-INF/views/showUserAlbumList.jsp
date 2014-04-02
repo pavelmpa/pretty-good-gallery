@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,7 +71,7 @@
                 </div>
             </div>
             <div class="col-xs-6 col-md-4 text-center">
-                <h4>User owner</h4>
+                <h4>Your albums</h4>
             </div>
             <div class="col-xs-6 col-md-4 text-right">
                 <a id="create-album" class="btn btn-primary btn-large" href="#">
