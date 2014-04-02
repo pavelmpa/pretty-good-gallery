@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/")
 public class HomeController {
 
-    Logger log = LoggerFactory.getLogger(HomeController.class);
+    private Logger log = LoggerFactory.getLogger(HomeController.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public String homePage() {
+        log.debug("Home controller.");
         return "home";
     }
 }
