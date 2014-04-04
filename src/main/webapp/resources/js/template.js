@@ -10,4 +10,7 @@ $(document).ready(function () {
         return this.href == url;
     }).parent().addClass("active");
 
+    $('#sign-in').on('shown.bs.modal', function () {
+        $(this).find("[autofocus]:first").focus();
+    })
 });

@@ -54,7 +54,7 @@
 
                 <div class="col-sm-9">
                     <form:input type="password" class="form-control" id="password" placeholder="Password"
-                                path="password"/>
+                                path="password" showPassword="falese"/>
                 </div>
             </div>
             <div class="form-group">
@@ -62,7 +62,7 @@
 
                 <div class="col-sm-9">
                     <form:input type="password" class="form-control" id="confirm-password"
-                                placeholder="Confirm password" path="confirmPassword"/>
+                                placeholder="Confirm password" path="confirmPassword" showPassword="falese"/>
                 </div>
             </div>
         </fieldset>

@@ -43,7 +43,10 @@ public class RegisterController {
             userDao.addUser(user);
         } catch (DuplicateKeyException dke) {
             log.info("Tried to add user that already exist.");
+
+            cleanPasswordFields(user);
             bindingResult.addError(new ObjectError("error", "Email already used."));
+
             return "register";
         }
 
@@ -52,6 +55,12 @@ public class RegisterController {
         securityContext.setAuthentication(auth);
 
         return "redirect:/profile";
+    }
+
+    private User cleanPasswordFields(User user) {
+        user.setPassword(null);
+        user.setConfirmPassword(null);
+        return user;
     }
 
     private BindingResult validatePasswordMatches(User user, BindingResult bindingResult) {
