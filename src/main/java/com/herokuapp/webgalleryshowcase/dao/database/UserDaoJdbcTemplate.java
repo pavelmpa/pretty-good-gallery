@@ -1,7 +1,9 @@
 package com.herokuapp.webgalleryshowcase.dao.database;
 
 import com.herokuapp.webgalleryshowcase.dao.UserDao;
+import com.herokuapp.webgalleryshowcase.dao.database.exceptions.EmailAlreadyTakenException;
 import com.herokuapp.webgalleryshowcase.dao.database.exceptions.UserNotFoundException;
+import com.herokuapp.webgalleryshowcase.dao.database.exceptions.UsernameAlreadyTakenException;
 import com.herokuapp.webgalleryshowcase.domain.User;
 import com.herokuapp.webgalleryshowcase.domain.UserAuthority;
 import org.slf4j.Logger;
@@ -29,6 +31,10 @@ public class UserDaoJdbcTemplate implements UserDao {
     private static final String ADD_USER = "INSERT INTO web_gallery.users (first_name, last_name, username, email, password) " +
             "VALUES (:firstName, :lastName, :username, :email, :password)";
 
+    private static final String CHECK_USERNAME = "SELECT COUNT(*) FROM web_gallery.users WHERE username = :username";
+
+    private static final String CHECK_EMAIL = "SELECT COUNT(*) FROM web_gallery.users WHERE email = :email";
+
     private static final String GET_USER_BY_EMAIL =
             "SELECT web_gallery.users.id, first_name, last_name, email, username, password, enabled, join_timestamp, authority " +
                     "FROM web_gallery.users " +
@@ -44,6 +50,14 @@ public class UserDaoJdbcTemplate implements UserDao {
 
     @Override
     public void addUser(User user) {
+        if (isEmailTaken(user.getEmail())) {
+            throw new EmailAlreadyTakenException("This email already taken.");
+        }
+
+        if (isUsernameTaken(user.getUsername())) {
+            throw new UsernameAlreadyTakenException("This username already taken.");
+        }
+
         SqlParameterSource params = new BeanPropertySqlParameterSource(user);
         jdbcTemplate.update(ADD_USER, params);
     }
@@ -59,6 +73,16 @@ public class UserDaoJdbcTemplate implements UserDao {
             throw new UserNotFoundException(1, ex);
         }
         return user;
+    }
+
+    private boolean isUsernameTaken(String username) {
+        SqlParameterSource paramSource = new MapSqlParameterSource("username", username);
+        return jdbcTemplate.queryForObject(CHECK_USERNAME, paramSource, Integer.class) > 0;
+    }
+
+    private boolean isEmailTaken(String email) {
+        SqlParameterSource paramSource = new MapSqlParameterSource("email", email);
+        return jdbcTemplate.queryForObject(CHECK_EMAIL, paramSource, Integer.class) > 0;
     }
 
     private final RowMapper<User> userRowMapper = new RowMapper<User>() {

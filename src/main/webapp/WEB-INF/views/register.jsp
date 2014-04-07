@@ -29,6 +29,7 @@
     <link href="<c:url value="/resources/css/validate.css"/>" rel="stylesheet">
 </head>
 <body>
+<!-- /container -->
 <div class="container">
     <form:form id="register-form" class="form-horizontal form-signup" role="form" commandName="user" method="post">
         <form:errors path="*" cssClass="alert alert-danger " element="div"/>
@@ -39,22 +40,24 @@
                 <label for="email" class="col-sm-3 control-label">Email</label>
 
                 <div class="col-sm-9">
-                    <form:input type="email" class="form-control" id="email" placeholder="Email" path="email"/>
+                    <form:input type="email" class="form-control" id="email"
+                                placeholder="Email" path="email" autofocus="true"/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="username" class="col-sm-3 control-label">Username</label>
 
                 <div class="col-sm-9">
-                    <form:input type="text" class="form-control" id="username" placeholder="Username" path="username"/>
+                    <form:input type="text" class="form-control" id="username"
+                                placeholder="Username" path="username"/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="password" class="col-sm-3 control-label">Password</label>
 
                 <div class="col-sm-9">
-                    <form:input type="password" class="form-control" id="password" placeholder="Password"
-                                path="password" showPassword="falese"/>
+                    <form:input type="password" class="form-control" id="password"
+                                placeholder="Password" path="password" showPassword="falese"/>
                 </div>
             </div>
             <div class="form-group">
@@ -94,12 +97,8 @@
         </fieldset>
     </form:form>
 </div>
-<!-- /container -->
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <script src="<spring:url value="/resources/js/jquery-2.0.0.js" />"></script>
+<script src="<spring:url value="/resources/js/bootstrap.min.js" />"></script>
 <script src="<spring:url value="/resources/js/jquery.validate.js" />"></script>
 <script src="<spring:url value="/resources/js/register.validate.js" />"></script>
 </body>

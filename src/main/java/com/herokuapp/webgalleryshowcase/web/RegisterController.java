@@ -1,11 +1,12 @@
 package com.herokuapp.webgalleryshowcase.web;
 
 import com.herokuapp.webgalleryshowcase.dao.UserDao;
+import com.herokuapp.webgalleryshowcase.dao.database.exceptions.EmailAlreadyTakenException;
+import com.herokuapp.webgalleryshowcase.dao.database.exceptions.UsernameAlreadyTakenException;
 import com.herokuapp.webgalleryshowcase.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -41,14 +42,18 @@ public class RegisterController {
 
         try {
             userDao.addUser(user);
-        } catch (DuplicateKeyException dke) {
-            log.info("Tried to add user that already exist.");
-
+        } catch (EmailAlreadyTakenException e) {
+            log.debug("Tried to add user that email already taken.");
             cleanPasswordFields(user);
             bindingResult.addError(new ObjectError("error", "Email already used."));
 
-            return "register";
+        } catch (UsernameAlreadyTakenException e) {
+            log.debug("Tried to add user that username already taken.");
+            cleanPasswordFields(user);
+            bindingResult.addError(new ObjectError("error", "Username already used."));
         }
+
+        if (bindingResult.hasErrors()) return "register";
 
         Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
         SecurityContext securityContext = SecurityContextHolder.getContext();
