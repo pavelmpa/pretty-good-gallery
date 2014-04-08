@@ -49,6 +49,7 @@
 ================================================== -->
 <jsp:include page="templates/footer.jsp"/>
 <script src="<c:url value="/resources/js/jquery-2.0.0.js" />"></script>
+<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 <script src="<c:url value="/resources/js/template.js" />"></script>
 </body>
 </html>

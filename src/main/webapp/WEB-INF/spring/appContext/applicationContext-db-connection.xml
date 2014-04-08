@@ -2,7 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
     <bean id="propertyResolver" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location" value="/WEB-INF/jdbc.properties"/>
@@ -10,31 +11,19 @@
 
     <context:component-scan base-package="com.herokuapp.webgalleryshowcase.dao.database"/>
 
-    <!--<jdbc:initialize-database data-source="dataSource">-->
-    <!--<jdbc:script location="WEB-INF/db-scripts/schema.sql"/>-->
-    <!--</jdbc:initialize-database>-->
+    <jdbc:initialize-database data-source="dataSource">
+        <jdbc:script location="WEB-INF/db-scripts/schema.sql"/>
+    </jdbc:initialize-database>
 
-    <!--<bean class="java.net.URI" id="dbUrl">-->
-    <!--<constructor-arg value="${DATABASE_URL}"/>-->
-    <!--</bean>-->
-
-    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">-->
-    <!--<property name="driverClassName" value="${database.driverClassName}"/>-->
-    <!--<property name="url"-->
-    <!--value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() + '?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory' }"/>-->
-    <!--<property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>-->
-    <!--<property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>-->
-    <!--</bean>-->
+    <bean class="java.net.URI" id="dbUrl">
+        <constructor-arg value="${DATABASE_URL}"/>
+    </bean>
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${database.driverClassName}"/>
-        <property name="url" value="${url}"/>
-        <property name="username" value="${username}"/>
-        <property name="password" value="${password}"/>
+        <property name="url"
+                  value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() + '?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory' }"/>
+        <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
+        <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
     </bean>
-
-    <!--  username=postgres -->
-    <!--  password=1 -->
-    <!--  url=jdbc:postgresql://localhost:5432/gallery -->
-
 </beans>
